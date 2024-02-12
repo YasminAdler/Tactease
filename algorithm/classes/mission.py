@@ -11,13 +11,13 @@ class MissionType(Enum):
 class Mission:
     missionId_counter = 1  # Class variable to auto-increment missionId
 
-    def __init__(self, missionType, start_date, end_date, soldiers=[]):
-        self.missionId = Mission.missionId_counter
+    def __init__(self, missionId, missionType, startDate, endDate, soldierCount, soldiersOnMission=[]):
+        self.missionId = missionId
         self.missionType = missionType
-        self.start_date = datetime.strptime(start_date, "%Y-%m-%d")
-        self.end_date = datetime.strptime(end_date, "%Y-%m-%d")
-        self.soldiersCount = len(soldiers)
-        self.soldiersOnMission = soldiers
+        self.startDate = datetime.strptime(startDate, "%d/%m/%Y %H:%M")
+        self.endDate = datetime.strptime(endDate, "%d/%m/%Y %H:%M")
+        self.soldierCount = soldierCount
+        self.soldiersOnMission = soldiersOnMission
 
         Mission.missionId_counter += 1  # Increment the ID for the next mission
 
