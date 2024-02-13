@@ -6,6 +6,6 @@ const MissionSchema = new Schema({
   endDate: { type: Date },
   soldierCount: { type: Number },
   soldiersOnMission: { type: Array }
-}, { collection: 'missions' })
+}, { collection: 'Missions' })
 
 module.exports = model('Mission', MissionSchema)
