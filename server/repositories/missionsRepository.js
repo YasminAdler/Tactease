@@ -3,12 +3,10 @@ const localStorage = require('../data/localStorage')
 
 module.exports = class missionsRepository  {
    constructor () {
-   //  if (process.env.DB_HOST && process.env.DB_USER && process.env.DB_PASS) 
-   //  {
-    this.storage = new MongoStorage('mission')
-   //  }
-   //  else { this.storage = new localStorage('missions');}
-    } 
+    if (process.env.DB_HOST && process.env.DB_USER && process.env.DB_PASS){
+    this.storage = new MongoStorage('mission')}
+    else { this.storage = new localStorage('missions');}
+   } 
 
    find () {
     return this.storage.find()

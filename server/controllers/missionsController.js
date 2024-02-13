@@ -38,7 +38,7 @@ exports.missionsController = {
         try{
             const mission = req.body
             if (mission.length === 0) throw new PropertyNotFoundError('mission')
-            mission.id = ++counter
+            mission.missionId = ++counter
             const result = {
                 status: 201,
                 message: '',

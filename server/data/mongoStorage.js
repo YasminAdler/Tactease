@@ -7,7 +7,7 @@ module.exports = class mongoStorage extends EventEmitter {
   constructor (entity) {
     super()
 
-    this.entityName = entity.charAt(0).toUpperCase() + entity.slice(1)
+    this.entityName = entity.charAt(0).toLowerCase() + entity.slice(1)
     this.Model = require(Path.join(__dirname, `../models/${this.entityName}Model.js`))
     this.connect()
   }
@@ -25,7 +25,7 @@ module.exports = class mongoStorage extends EventEmitter {
   }
 
   retrieve (id) {
-    return this.Model.find({ id })
+    return this.Model.find({ missionId:id })
   }
 
   create (data) {
@@ -34,10 +34,10 @@ module.exports = class mongoStorage extends EventEmitter {
   }
 
   delete (id) {
-    return this.Model.deleteOne({ id })
+    return this.Model.deleteOne({ missionId:id })
   }
 
   update (id, data) {
-    return this.Model.updateOne({ id }, data)
+    return this.Model.updateOne({ missionId:id }, data)
   }
 }
