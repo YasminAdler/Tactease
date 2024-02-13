@@ -17,6 +17,7 @@
     "node-fetch": "^2.6.6"
   },
   "devDependencies": {
+    "eslint": "^8.56.0",
     "nodemon": "^3.0.3"
   }
 }
