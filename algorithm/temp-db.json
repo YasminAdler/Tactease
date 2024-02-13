@@ -1,0 +1,132 @@
+[
+    {
+        "personalNumber": 1234567,
+        "fullName": "Ran Lachmi",
+        "class": {
+            "classId": 40,
+            "className": "Haruvit"
+        },
+        "pakal": "SNIPER",
+        "requestList": [ ]
+    },
+
+    {
+        "personalNumber": 8765421,
+        "fullName": "Eido Peretz",
+        "class": {
+            "classId": 40,
+            "className": "Haruvit"
+        },
+        "pakal": "MAG",
+        "requestList": []
+    },
+    {
+        "personalNumber": 1122334,
+        "fullName": "Amit Levi",
+        "class": {
+            "classId": 40,
+            "className": "Haruvit"
+        },
+        "pakal": "ROVAI",
+        "requestList": []
+    },
+    {
+        "personalNumber": 1233215,
+        "fullName": "Idan Itah",
+        "class": {
+            "classId": 40,
+            "className": "Haruvit"
+        },
+        "pakal": "KALA",
+        "requestList": []
+    },
+    {
+        "personalNumber": 9879654,
+        "fullName": "Naim Genam",
+        "class": {
+            "classId": 40,
+            "className": "Haruvit"
+        },
+        "pakal": "METADOR",
+        "requestList": []
+    },
+    {
+        "personalNumber": 8256412,
+        "fullName": "Adi Levi",
+        "class": {
+            "classId": 40,
+            "className": "Haruvit"
+        },
+        "pakal": "MEDIC",
+        "requestList": []
+    },
+    {
+        "personalNumber": 6546546,
+        "fullName": "Moran Sinai",
+        "class": {
+            "classId": 40,
+            "className": "Haruvit"
+        },
+        "pakal": "SNIPER",
+        "requestList": []
+    },
+    {
+        "personalNumber": 9857656,
+        "fullName": "Irit Cohen",
+        "class": {
+            "classId": 40,
+            "className": "Haruvit"
+        },
+        "pakal": "MAG",
+        "requestList": []
+    },
+    {
+        "personalNumber": 1589874,
+        "fullName": "Alice Peretz",
+        "class": {
+            "classId": 40,
+            "className": "Haruvit"
+        },
+        "pakal": "KALA",
+        "requestList": []
+    },
+    {
+        "personalNumber": 6589711,
+        "fullName": "Guy Yaffe",
+        "class": {
+            "classId": 40,
+            "className": "Haruvit"
+        },
+        "pakal": "MEDIC",
+        "requestList": []
+    },
+    {
+        "personalNumber": 5555555,
+        "fullName": "English Bad",
+        "class": {
+            "classId": 40,
+            "className": "Haruvit"
+        },
+        "pakal": "ROVAI",
+        "requestList": []
+    },
+    {
+        "personalNumber": 1232323,
+        "fullName": "Noam Sinay",
+        "class": {
+            "classId": 40,
+            "className": "Haruvit"
+        },
+        "pakal": "CHAIN COMMANDER",
+        "requestList": []
+    },
+    {
+        "personalNumber": 1111111,
+        "fullName": "Yasmin Adler",
+        "class": {
+            "classId": 40,
+            "className": "Haruvit"
+        },
+        "pakal": "COMMANDER"
+    }
+]
