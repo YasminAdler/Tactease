@@ -1,9 +1,9 @@
 require('express-async-errors');
 const express = require('express')
 const logger = require('morgan')
-const { missionsRouter } = require('../routers/missionRouter')
-const { requestRouter } = require('../routers/request.router')
-const errorHandler = require('../middleware/errorHandler');
+const { missionsRouter } = require('./routers/missionRouter')
+const { requestRouter } = require('./routers/request.router')
+const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 const port = process.env.PORT || 3000
