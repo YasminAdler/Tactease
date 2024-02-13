@@ -1,6 +1,6 @@
 const missionRepository = require('../repositories/missionsRepository');
 const missions = new missionRepository()
-let counter = 1
+let counter = 5
 exports.missionsController = {
     async getMissions (req,res){
         try{
@@ -9,7 +9,7 @@ exports.missionsController = {
                 message: '',
                 data: await missions.find()
             }
-            if (result.data.length === 0 || !result.data) throw new EntityNotFoundError('Reports')
+            if (result.data.length === 0 || !result.data) throw new EntityNotFoundError('missions')
             res.status(result.status)
             res.json(result.message || result.data)
         }catch(error){
