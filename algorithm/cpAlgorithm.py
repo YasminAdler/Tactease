@@ -3,10 +3,10 @@ import json
 from datetime import datetime
 
 # Path to your JSON file
-# file_path = './temp-missions.json'
+file_path = 'temp-missions.json'
 
 # Reading the JSON file
-with open('temp-missions.json', 'r') as file:
+with open(file_path, 'r') as file:
         missions_data = json.load(file)
 
 from classes.mission import Mission

@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Adi/Shenkar/Method in Software Engineering/Tactease",
-      "program": "c:/Adi/Shenkar/Method in Software Engineering/Tactease/build/Debug/outDebug",
+      "cwd": "c:/Users/adler/AppData/Local/Microsoft/Windows/INetCache/IE/8TNNA1VK",
+      "program": "c:/Users/adler/AppData/Local/Microsoft/Windows/INetCache/IE/8TNNA1VK/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
