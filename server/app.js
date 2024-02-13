@@ -2,7 +2,7 @@ const express = require('express')
 const logger = require('morgan')
 const app = express()
 const port = process.env.PORT || 3000
-const { missionsRouter } = require('/router/missionRouter')
+const { missionsRouter } = require('./routers/missionRouter')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use('/missions', missionsRouter)

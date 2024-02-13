@@ -1,55 +1,89 @@
-const missionRepository = require('../repositories/missionRepository');
+const missionRepository = require('../repositories/missionsRepository');
 const missions = new missionRepository()
-let counter = 1
+let counter = 5
 exports.missionsController = {
     async getMissions (req,res){
-        const result = {
-            status: 200,
-            message: '',
-            data: await missions.find()
+        try{
+            const result = {
+                status: 200,
+                message: '',
+                data: await missions.find()
+            }
+            if (result.data.length === 0 || !result.data) throw new EntityNotFoundError('missions')
+            res.status(result.status)
+            res.json(result.message || result.data)
+        }catch(error){
+            res.status(error?.status || 500)
+            res.json({ message: error.message })
         }
-        res.status(result.status)
-        res.json(result.message || result.data)
     },
     async getMissionByID (req,res){
-        const { id } = req.params
-        const result = {
-            status: 200,
-            message: '',
-            data: await missions.retrieve(id)
+        try{
+            const { id } = req.params
+            if (id === ':id') throw new PropertyNotFoundError('id')
+            const result = {
+                status: 200,
+                message: '',
+                data: await missions.retrieve(id)
+            }
+            if (result.data.length === 0 || !result.data) throw new EntityNotFoundError('mission')
+            res.status(result.status)
+            res.json(result.message || result.data)
+        } catch (error) {
+            res.status(error?.status || 500)
+            res.json({ message: error.message })
         }
-        res.status(result.status)
-        res.json(result.message || result.data)
     },
     async addMission (req, res){
-        const mission = req.body
-        mission.id = ++counter
-        const result = {
-            status: 201,
-            message: '',
-            data: await missions.create(mission)
+        try{
+            const mission = req.body
+            if (mission.length === 0) throw new PropertyNotFoundError('mission')
+            mission.id = ++counter
+            const result = {
+                status: 201,
+                message: '',
+                data: await missions.create(mission)
+            }
+            res.status(result.status)
+            res.json(result.message || result.data)
+        } catch (error) {
+            res.status(error?.status || 500)
+            res.json({ message: error.message })
         }
-        res.status(result.status)
-        res.json(result.message || result.data)
     },
     async updateMission (req,res) {
-        const { body: mission , params: { id } } = req
-        const result = {
-            status: 200,
-            message: '',
-            data: await missions.update(id, mission)
-        } 
-        res.status(result.status)
-        res.json(result.message || result.data)
+        try{
+            const { body: mission , params: { id } } = req
+            if (mission.length === 0) throw new PropertyNotFoundError('mission')
+            if (id === ':id') throw new PropertyNotFoundError('id')
+            const result = {
+                status: 200,
+                message: '',
+                data: await missions.update(id, mission)
+            } 
+            if (!result.data) throw new Error('Error updating mission')
+            res.status(result.status)
+            res.json(result.message || result.data)
+        } catch (error) {
+            res.status(error?.status || 500)
+            res.json({ message: error.message })
+        }
     },
     async deleteMission (req,res){
-        const { id } = req.params
-        const result = {
-            status: 200,
-            message: '',
-            data: await missions.delete(id)
-        } 
-        res.status(result.status)
-        res.json(result.message || result.data)
+        try{
+            const { id } = req.params
+            if (id === ':id') throw new PropertyNotFoundError('id')
+            const result = {
+                status: 200,
+                message: '',
+                data: await missions.delete(id)
+            } 
+            if (!result.data) throw new Error('Error deleting mission')
+            res.status(result.status)
+            res.json(result.message || result.data)
+        } catch (error) {
+            res.status(error?.status || 500)
+            res.json({ message: error.message })
+        }
     }
 }
