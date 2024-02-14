@@ -1,4 +1,4 @@
-from request import Request
+# from request import Request
 from enum import Enum
 
 class PAKAL(Enum):
@@ -20,9 +20,16 @@ class daysoffType(Enum):
     DALET=2
     
 class Soldier:
-    def __init__(self, pakal, requestsList=None):
+    def __init__(self, personalNumber, fullName, classId, className, pakal, requestsList=None):
+        self.personalNumber = personalNumber
+        self.fullName = fullName
+        self.classId = classId
+        self.className = className
         self.pakal = pakal
         self.requestsList = requestsList if requestsList is not None else []
+
+    def __str__(self):
+        return f"Soldier: {self.fullName} (ID: {self.personalNumber}, Class: {self.className}, Pakal: {self.pakal})"
 
     def addRequest(self, request):
         self.requestsList.append(request)
@@ -35,3 +42,4 @@ class Soldier:
             if request.request_id == request_id:
                 return request
         return None
+    
