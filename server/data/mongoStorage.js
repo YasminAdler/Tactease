@@ -6,7 +6,7 @@ module.exports = class mongoStorage extends EventEmitter {
   constructor (entity) {
     super()
 
-    this.entityName = entity.charAt(0).toUpperCase() + entity.slice(1)
+    this.entityName = entity.charAt(0).toLowerCase() + entity.slice(1)
     this.Model = require(Path.join(__dirname, `../models/${this.entityName}Model.js`))
     this.connect()
   }

@@ -2,7 +2,7 @@ const MongoStorage = require('../data/mongoStorage')
 const localStorage = require('../data/localStorage')
 
 
-const mongoStorage = new MongoStorage('reports');
+const mongoStorage = new MongoStorage('requests');
 
 const findRequests = () => mongoStorage.find({});
 
