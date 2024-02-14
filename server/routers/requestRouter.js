@@ -1,12 +1,12 @@
 const { Router } = require('express');
-const {requestController } = require('../controller/requestController');
+const { requestsController } = require('../controllers/requestController');
 
-const reportsRouter = new Router();
+const requestsRouter = new Router();
 
-reportsRouter.get('/', reportsController.getAllRequests);
-reportsRouter.get('/:requestId', reportsController.getRequestById);
-reportsRouter.post('/', reportsController.createReport);
-reportsRouter.put('/:requestId', reportsController.updateReport);
-reportsRouter.delete('/:requestId', reportsController.deleteReport);
+requestsRouter.get('/', requestsController.getAllRequests);
+requestsRouter.get('/:requestId', requestsController.getRequestById);
+requestsRouter.post('/', requestsController.createRequest);
+requestsRouter.put('/:requestId', requestsController.updateRequest);
+requestsRouter.delete('/:requestId', requestsController.deleteRequest);
 
-module.exports = { reportsRouter };
+module.exports = { requestsRouter };

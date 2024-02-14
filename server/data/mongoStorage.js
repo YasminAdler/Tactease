@@ -2,6 +2,7 @@ const { EventEmitter } = require('events')
 const mongoose = require('mongoose')
 const Path = require('path')
 
+
 module.exports = class mongoStorage extends EventEmitter {
   constructor (entity) {
     super()
@@ -24,7 +25,7 @@ module.exports = class mongoStorage extends EventEmitter {
   }
 
   retrieve (id) {
-    return this.Model.find({ id })
+    return this.Model.find({ _id:id })
   }
 
   create (data) {
@@ -33,10 +34,10 @@ module.exports = class mongoStorage extends EventEmitter {
   }
 
   delete (id) {
-    return this.Model.deleteOne({ id })
+    return this.Model.deleteOne({ _id:id })
   }
 
   update (id, data) {
-    return this.Model.updateOne({ id }, data)
+    return this.Model.updateOne({ _id:id }, data)
   }
 }

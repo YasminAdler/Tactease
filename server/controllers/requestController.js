@@ -4,7 +4,7 @@ const {
     createRequest,
     updateRequest,
     deleteRequest,
-} = require('../repository/requestsRepository');
+} = require('../repositories/requestRepository');
 const { EntityNotFoundError, PropertyNotFoundError, BadRequestError } = require('../errors/errors');
 
 exports.requestsController = {

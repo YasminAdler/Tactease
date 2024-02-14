@@ -2,7 +2,7 @@ require('express-async-errors');
 const express = require('express')
 const logger = require('morgan')
 const { missionsRouter } = require('./routers/missionRouter')
-const { requestRouter } = require('./routers/requestRouter')
+const { requestsRouter } = require('./routers/requestRouter')
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(logger('dev'));
 
 app.use('/missions', missionsRouter);
-app.use('/soldier/request', requestRouter);
+app.use('/soldier/request', requestsRouter);
 app.use(errorHandler);
 
 app.use((req, res) => {
