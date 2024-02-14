@@ -25,7 +25,7 @@ module.exports = class mongoStorage extends EventEmitter {
   }
 
   retrieve (id) {
-    return this.Model.find({ missionId:id })
+    return this.Model.find({ _id:id })
   }
 
   create (data) {
@@ -34,10 +34,10 @@ module.exports = class mongoStorage extends EventEmitter {
   }
 
   delete (id) {
-    return this.Model.deleteOne({ missionId:id })
+    return this.Model.deleteOne({ _id:id })
   }
 
   update (id, data) {
-    return this.Model.updateOne({ missionId:id }, data)
+    return this.Model.updateOne({ _id:id }, data)
   }
 }

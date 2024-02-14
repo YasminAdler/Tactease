@@ -1,30 +1,32 @@
 const MongoStorage = require('../data/mongoStorage')
 const localStorage = require('../data/localStorage')
 
-module.exports = class missionsRepository  {
-   constructor () {
+// module.exports = class missionsRepository  {
+//    constructor () {
     if (process.env.DB_HOST && process.env.DB_USER && process.env.DB_PASS){
     this.storage = new MongoStorage('mission')}
-    else { this.storage = new localStorage('missions');}
-   } 
+   //  else { this.storage = new localStorage('missions');}
+   // } 
 
-   find () {
+   const findMissions  = () => {
     return this.storage.find()
    }
 
-   retrieve (id) {
+   const retrieveMission = (id) => {
     return this.storage.retrieve(id)
    }
 
-   create (data) {
-    return this.storage.create(data)
+   const createMission = (mission) => {
+    return this.storage.create(mission)
    }
 
-   update (id, data) {
-    return this.storage.update(id,data)
+   const updateMission = (id, mission) => {
+    return this.storage.update(id,mission)
    }
 
-   delete (id) {
+   const deleteMission = (id) => {
     return this.storage.delete(id)
    }
-}
+// }
+
+module.exports = { findMissions, retrieveMission, createMission, updateMission, deleteMission };
