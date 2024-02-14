@@ -4,7 +4,7 @@ const {
     createRequest,
     updateRequest,
     deleteRequest,
-} = require('../repository/requests.repository');
+} = require('../repository/requestsRepository');
 const { EntityNotFoundError, PropertyNotFoundError, BadRequestError } = require('../errors/errors');
 
 exports.requestsController = {
@@ -35,10 +35,11 @@ exports.requestsController = {
         try {
             if (Object.keys(req.body).length === 0) throw new BadRequestError('create');
             const {
-                requestType, daysOffType, startDate, endDate,
+                soldierId, requestType, daysOffType, startDate, endDate,
             } = req.body;
             if (
-                !requestType
+                !soldierId
+                || !requestType
                 || !daysOffType
                 || !startDate
                 || !endDate

@@ -7,4 +7,4 @@ const MissionSchema = new Schema({
   damage: { type: String }
 }, { collection: 'missions' })
 
-module.exports = model('Mission', MissionSchema)
+module.exports = model('mission', MissionSchema)

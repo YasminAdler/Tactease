@@ -2,7 +2,7 @@ require('express-async-errors');
 const express = require('express')
 const logger = require('morgan')
 const { missionsRouter } = require('./routers/missionRouter')
-const { requestRouter } = require('./routers/request.router')
+const { requestRouter } = require('./routers/requestRouter')
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
