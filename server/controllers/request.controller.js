@@ -4,14 +4,14 @@ const {
     createRequest,
     updateRequest,
     deleteRequest,
-} = require('../repository/reports.repository');
+} = require('../repository/requests.repository');
 const { EntityNotFoundError, PropertyNotFoundError, BadRequestError } = require('../errors/errors');
 
-exports.reportsController = {
+exports.requestsController = {
     async getAllRequests(req, res, next) {
         try {
-            const requests = await findReports();
-            if (!requests || requests.length === 0) throw new EntityNotFoundError('reports');
+            const requests = await findRequests();
+            if (!requests || requests.length === 0) throw new EntityNotFoundError('requests');
             res.status(200).json(requests);
         } catch (error) {
             next(error);
@@ -23,9 +23,9 @@ exports.reportsController = {
         try {
             const isId = mongoose.isValidObjectId(requestId);
             if (!isId) throw new BadRequestError('id');
-            const request = await retrieveReport(requestId);
-            if (!request || request.length === 0) throw new EntityNotFoundError(`Report with id <${requestId}>`);
-            res.status(200).json(report);
+            const request = await retrieveRequest(requestId);
+            if (!request || request.length === 0) throw new EntityNotFoundError(`Request with id <${requestId}>`);
+            res.status(200).json(request);
         } catch (error) {
             next(error);
         }
@@ -43,7 +43,7 @@ exports.reportsController = {
                 || !startDate
                 || !endDate
             ) throw new PropertyNotFoundError('create - missing arguments');
-            const request = await createReport(req.body);
+            const request = await createRequest(req.body);
             res.status(200).json(request);
         } catch (error) {
             if (error.name === 'ValidationError') {
@@ -54,12 +54,12 @@ exports.reportsController = {
     },
 
 
-    async deleteReport(req, res, next) {
+    async deleteRequest(req, res, next) {
         try {
             const { requestId } = req.params;
             const isId = mongoose.isValidObjectId(requestId);
             if (!isId) throw new BadRequestError('id');
-            const request = await deleteReport(requestId);
+            const request = await deleteRequest(requestId);
             if (!request || request.length === 0) throw new EntityNotFoundError(`Request with id <${requestId}>`);
             res.status(200).json(request);
         } catch (error) {
@@ -70,15 +70,15 @@ exports.reportsController = {
         }
     },
 
-    async updateReport(req, res, next) {
+    async updateRequest(req, res, next) {
         try {
             const { requestId } = req.params;
             const isId = mongoose.isValidObjectId(requestId);
             if (!isId) throw new BadRequestError('id');
             if (Object.keys(req.body).length === 0) throw new BadRequestError('update');
-            const report = await updateReport(reportId, req.body);
-            if (!report || report.length === 0) throw new EntityNotFoundError(`Report with id <${requestId}>`);
-            res.status(200).json(report);
+            const request = await updateRequest(requestId, req.body);
+            if (!request || request.length === 0) throw new EntityNotFoundError(`Request with id <${requestId}>`);
+            res.status(200).json(request);
         } catch (error) {
             next(error);
         }

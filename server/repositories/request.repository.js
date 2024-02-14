@@ -4,16 +4,16 @@ const localStorage = require('../data/localStorage')
 
 const mongoStorage = new MongoStorage('reports');
 
-const findReports = () => mongoStorage.find({});
+const findRequests = () => mongoStorage.find({});
 
-const retrieveReport = (id) => mongoStorage.retrieve({ _id: id });
+const retrieveRequest = (id) => mongoStorage.retrieve({ _id: id });
 
-const createReport = (report) => mongoStorage.create(report);
+const createRequest = (report) => mongoStorage.create(report);
 
-const updateReport = (id, report) => mongoStorage.update({ _id: id }, report);
+const updateRequest = (id, report) => mongoStorage.update({ _id: id }, report);
 
-const deleteReport = (report) => mongoStorage.delete({ _id: report });
+const deleteRequest = (report) => mongoStorage.delete({ _id: report });
 
 module.exports = {
-    findReports, retrieveReport, createReport, updateReport, deleteReport,
+    findRequests, retrieveRequest, createRequest, updateRequest, deleteRequest,
 };
