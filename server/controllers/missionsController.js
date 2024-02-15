@@ -36,7 +36,8 @@ exports.missionsController = {
             }
             if (result.data.length === 0 || !result.data) throw new EntityNotFoundError(`Request with id <${missionId}>`)
             res.status(result.status)
-            res.json(result.message || result.data)        } catch (error) {
+            res.json(result.message || result.data)
+        } catch (error) {
             next(error)
         }
     },
