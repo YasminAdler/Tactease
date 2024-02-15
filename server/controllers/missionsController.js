@@ -1,9 +1,10 @@
+const mongoose = require('mongoose');
 const {
-    findMissions,
-    retrieveMission,
-    createMission,
-    updateMission,
-    deleteMission
+  findMissions,
+  retrieveMission,
+  createMission,
+  updateMission,
+  deleteMission,
 } = require('../repositories/missionsRepository');
 const { EntityNotFoundError, PropertyNotFoundError, BadRequestError } = require('../errors/errors')
 const mongoose = require('mongoose');
@@ -102,4 +103,5 @@ exports.missionsController = {
             next(error)
         }
     }
-}
+  },
+};

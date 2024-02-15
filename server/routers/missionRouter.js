@@ -1,11 +1,12 @@
-const { Router } = require('express')
-const { missionsController } = require('../controllers/missionsController')
-const missionsRouter = new Router()
+const { Router } = require('express');
+const { missionsController } = require('../controllers/missionsController');
 
-missionsRouter.get('/', missionsController.getMissions)
-missionsRouter.get('/:id', missionsController.getMissionByID)
-missionsRouter.post('/', missionsController.addMission)
-missionsRouter.put('/:id', missionsController.updateMission)
-missionsRouter.delete('/:id', missionsController.deleteMission)
+const missionsRouter = new Router();
 
-module.exports = { missionsRouter }
+missionsRouter.get('/', missionsController.getMissions);
+missionsRouter.get('/:missionId', missionsController.getMissionByID);
+missionsRouter.post('/', missionsController.addMission);
+missionsRouter.put('/:missionId', missionsController.updateMission);
+missionsRouter.delete('/:missionId', missionsController.deleteMission);
+
+module.exports = { missionsRouter };
