@@ -1,4 +1,4 @@
-const MongoStorage = require('../data/mongoStorage')
+const MongoStorage = require('../data/mongoStorage');
 
 if (process.env.DB_HOST && process.env.DB_USER && process.env.DB_PASS) {
    this.storage = new MongoStorage('requests');
