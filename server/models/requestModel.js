@@ -9,4 +9,4 @@ const RequestModel = new Schema({
     fileName: { type: String }
 }, { collection: 'requests' })
 
-module.exports = model('requests', RequestModel)
+module.exports = model('request', RequestModel)

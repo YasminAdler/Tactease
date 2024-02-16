@@ -7,15 +7,21 @@ const { errorHandler } = require('./middlewares/errorHandler');
 const app = express();
 const port = process.env.PORT || 3000;
 const { missionsRouter } = require('./routers/missionRouter');
+const { soldiersRouter } = require('./routers/soldierRouter');
 const { requestsRouter } = require('./routers/requestRouter');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/missions', missionsRouter);
-app.use('/soldier/request', requestsRouter);
+app.use('/soldier', soldiersRouter);
 
-app.use(errorHandler);
 app.use(logger('dev'));
+app.use(errorHandler);
+
+app.use((req, res) => {
+    res.status(400).send("Couldn't connect");
+  });
+  
 
 app.listen(port, () => console.log(`Express server is running on port ${port}`));
 
