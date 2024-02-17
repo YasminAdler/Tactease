@@ -11,11 +11,8 @@ no_two_missions_consecutively_flag = 1
 Enable = 1
 Disable = 0
 
-
-
 file_path = 'C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/temp-missions.json'
 file_path_soldier = 'C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/temp-db.json'
-
 
 with open(file_path, 'r') as file:
     missions_data = json.load(file)
@@ -25,15 +22,11 @@ missions = getMissions(missions_data)
 with open(file_path_soldier, 'r') as file:
     soldiers_data = json.load(file)
 
-
 soldiers = getSoldiers(soldiers_data)
 
 model = cp_model.CpModel()
 
 mission_intervals = {}
-
-
-
 
 # Create an IntervalVar for each mission
 for mission in missions:
@@ -72,6 +65,7 @@ for missionId_key, interval_var in mission_intervals.items():
 # for soldierId_key in [str(soldier.personalNumber) for soldier in soldiers]:
 #     model.Add(sum(soldier_mission_vars[(soldierId_key, missionId_key)] for missionId_key in mission_intervals.keys()) <= 2)
 
+
 # constraint: a soldier cannot be assigned to more than 1 mission at a time:
 def missions_overlap(mission1_id, mission2_id):
     start1, end1 = mission_intervals[mission1_id].StartExpr(), mission_intervals[mission1_id].EndExpr()
@@ -91,7 +85,6 @@ for soldier in soldiers:
                     ])
 
 # end of constraint - one mission at a time
-
 
 # Constraint: A soldier cannot be assigned to two consectutive missions
 if(no_two_missions_consecutively_flag == Enable):
@@ -113,9 +106,7 @@ if(no_two_missions_consecutively_flag == Enable):
     # Call the function to add the constraint to your model
     add_non_consecutive_mission_constraint(model, soldiers, missions, soldier_mission_vars, mission_intervals)
 
-
 # end of constraint: no two missions consecutively 
-
 
 solver = cp_model.CpSolver()
 status = solver.Solve(model)
