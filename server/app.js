@@ -19,10 +19,9 @@ app.use('/soldier', soldierRouter);
 app.use(errorHandler);
 
 app.use((req, res) => {
-    res.status(400).send("Couldn't connect");
-  });
-  
+  res.status(400).send("Couldn't connect");
+});
 
 app.listen(port, () => console.log(`Express server is running on port ${port}`));
 
-module.exports = app; //for testing
+module.exports = app; // for testing

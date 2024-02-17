@@ -7,13 +7,9 @@
     <list default="true" id="3473a25e-4823-43de-9986-0041ea517ac0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/missionsController.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/missionsController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/controllers/soldierController.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/soldierController.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/data/mongoStorage.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/data/mongoStorage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/errors/errors.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/errors/errors.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/middlewares/errorHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/middlewares/errorHandler.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/models/MissionModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/missionModel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/repositories/missionsRepository.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/repositories/missionsRepository.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routers/missionRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routers/missionRouter.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,11 +33,11 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Node.js.app.js.executor": "Debug",
+    "Node.js.app.js.executor": "Run",
     "Node.js.missionsController.js.executor": "Debug",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "moran's-server-missions",
+    "git-widget-placeholder": "server-adi",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/מורן/OneDrive/Desktop/Dev/3rd year/Methods/Tactease/Tactease",
     "node.js.detected.package.eslint": "true",
@@ -64,10 +60,29 @@
       <workItem from="1707988227162" duration="1417000" />
       <workItem from="1707990578466" duration="731000" />
       <workItem from="1707991566448" duration="2723000" />
+      <workItem from="1708177662858" duration="629000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/server/data/mongoStorage.js</url>
+          <line>29</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/server/controllers/soldierController.js</url>
+          <line>35</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

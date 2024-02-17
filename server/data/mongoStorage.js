@@ -29,7 +29,7 @@ module.exports = class mongoStorage extends EventEmitter {
 
   create(data) {
     const newEntity = new this.Model(data);
-    newEntity.save();
+    return newEntity.save();
   }
 
   delete(id) {
