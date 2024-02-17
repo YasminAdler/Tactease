@@ -26,6 +26,7 @@ class Soldier:
         self.classId = classId
         self.className = className
         self.pakal = pakal
+        self.missionHour = 0
         self.requestsList = requestsList if requestsList is not None else []
 
     def __str__(self):

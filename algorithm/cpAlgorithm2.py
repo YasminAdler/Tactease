@@ -3,6 +3,7 @@ from ortools.sat.python import cp_model
 import json
 from datetime import datetime, timedelta
 from classes.soldier import Soldier
+from collections import defaultdict
 from functions import getMissions, getSoldiers, datetime_to_hours, hours_to_datetime
 
 MIN_REST_HOURS = 7  # Minimal resting time in hours
@@ -24,7 +25,15 @@ with open(file_path_soldier, 'r') as file:
 
 soldiers = getSoldiers(soldiers_data)
 
-model = cp_model.CpModel()
+missions_by_day = defaultdict(list)
+for mission in missions:
+    start_day = mission.startDate.date()  # Assuming mission.startDate is a datetime object
+    missions_by_day[start_day].append(mission)
+
+# Schedule missions for each day separately
+for day, missions_for_day in missions_by_day.items():
+    model = cp_model.CpModel()
+
 
 mission_intervals = {}
 
@@ -54,17 +63,15 @@ for soldier in soldiers:
 def dis_en_able_constraints(flag, action):
     flag = action
 
-# Constraint: Each mission must be assigned at least one soldier
+
+# Constraint: Each mission must be assigned at least one soldier and by required soldiers number for the mission
 for missionId_key, interval_var in mission_intervals.items():
     required_soldiers = next((mission.soldierCount for mission in missions if str(mission.missionId) == missionId_key), None)
     if required_soldiers is not None:
         model.Add(sum(soldier_mission_vars[(str(soldier.personalNumber), missionId_key)] for soldier in soldiers) == required_soldiers)
-
-
-# # Constraint: Each soldier must be assigned at most two mission at a time
-# for soldierId_key in [str(soldier.personalNumber) for soldier in soldiers]:
-#     model.Add(sum(soldier_mission_vars[(soldierId_key, missionId_key)] for missionId_key in mission_intervals.keys()) <= 2)
-
+        with open('output.txt', 'a') as f:
+            f.write(str(model))
+            f.write('\n\n')
 
 # constraint: a soldier cannot be assigned to more than 1 mission at a time:
 def missions_overlap(mission1_id, mission2_id):
@@ -85,6 +92,7 @@ for soldier in soldiers:
                     ])
 
 # end of constraint - one mission at a time
+
 
 # Constraint: A soldier cannot be assigned to two consectutive missions
 if(no_two_missions_consecutively_flag == Enable):
@@ -108,25 +116,13 @@ if(no_two_missions_consecutively_flag == Enable):
 
 # end of constraint: no two missions consecutively 
 
+
 solver = cp_model.CpSolver()
 status = solver.Solve(model)
 
-## See soldiers assignment: 
 
-# if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
-#     for soldier in soldiers:
-#         soldierId_key = str(soldier.personalNumber)
-#         actual_total_hours = 0
-#         for mission in missions:
-#             missionId_key = str(mission.missionId)
-#             if solver.Value(soldier_mission_vars[(soldierId_key, missionId_key)]):
-#                 duration_hours = datetime_to_hours(mission.endDate) - datetime_to_hours(mission.startDate)
-#                 actual_total_hours += duration_hours
-#         print(f"Soldier {soldierId_key} is assigned to missions for a total of {actual_total_hours} hours.")
-
-
-if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
-    print("Solution Found:")
+if status in [cp_model.OPTIMAL, cp_model.FEASIBLE]:
+    print(f"Solution found for {day}:")
     missions_details = []
     for mission in missions:
         missionId_key = str(mission.missionId)
@@ -144,7 +140,7 @@ if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
         else:
             print(f"Mission ID {missionId_key} not found in mission_intervals")
 
-    # Sort missions by start datetime
+    # Sort missions by start dateti  q  me
     missions_details.sort(key=lambda x: x[1])
 
     # Print sorted missions
@@ -152,8 +148,8 @@ if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
         missionId_key, start_datetime, assigned_soldiers = mission_detail
         print(f"Mission {missionId_key} starts at {start_datetime}. Assigned Soldiers: {assigned_soldiers}")
 else:
-    print("No solution was found.")
+    print(f"No solution for {day}")
     print("Solver status:", status)
     print("Solver statistics:")
     print(solver.ResponseStats())
-    
+        
