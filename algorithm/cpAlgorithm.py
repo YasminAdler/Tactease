@@ -153,7 +153,7 @@ if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
         else:
             print(f"Mission ID {missionId_key} not found in mission_intervals")
 
-    # Sort missions by start datetime
+    # Sort missions by start dateti  q      me
     missions_details.sort(key=lambda x: x[1])
 
     # Print sorted missions
