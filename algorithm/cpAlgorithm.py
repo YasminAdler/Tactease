@@ -79,6 +79,21 @@ def soldier_break(mission1_id, mission2_id):
     start2 = mission_intervals[mission2_id].StartExpr()
     return (start2 - end1 < MIN_REST_HOURS)
 
+soldier_assigned_vars = {}
+for soldier in soldiers:
+    soldier_id = str(soldier.personalNumber)
+    # This variable is 1 if the soldier is assigned to any mission, 0 otherwise
+    soldier_assigned_vars[soldier_id] = model.NewBoolVar(f'soldier_assigned_{soldier_id}')
+
+
+# constraint : Soldiers should be assigned equally
+for soldier_id in soldier_assigned_vars:
+    # Attempt to ensure every soldier has at least one mission assigned
+    model.Add(sum(soldier_mission_vars[(soldier_id, missionId_key)] for missionId_key in mission_intervals) >= 1)
+
+missions_assigned_to_soldier = [soldier_mission_vars[(soldier_id, missionId_key)] for missionId_key in mission_intervals]
+model.AddMaxEquality(soldier_assigned_vars[soldier_id], missions_assigned_to_soldier)
+
 
 for soldier in soldiers:
     soldier_id = str(soldier.personalNumber)

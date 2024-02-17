@@ -38,5 +38,45 @@
         "endDate": "12/02/2024 23:00",
         "soldierCount": 4,
         "soldiersOnMission": []
+    },
+    {
+        "missionId": 6,
+        "missionType": "GUARD",
+        "startDate": "13/02/2024 6:00",
+        "endDate": "13/02/2024 10:00",
+        "soldierCount": 2,
+        "soldiersOnMission": []
+    },
+    {
+        "missionId": 7,
+        "missionType": "GUARD",
+        "startDate": "13/02/2024 14:00",
+        "endDate": "13/02/2024 18:00",
+        "soldierCount": 2,
+        "soldiersOnMission": []
+    },
+    {
+        "missionId": 8,
+        "missionType": "WATCH",
+        "startDate": "13/02/2024 18:00",
+        "endDate": "13/02/2024 20:00",
+        "soldierCount": 2,
+        "soldiersOnMission": []
+    },
+    {
+        "missionId": 9,
+        "missionType": "PATROL_BY_CAR",
+        "startDate": "13/02/2024 2:00",
+        "endDate": "13/02/2024 6:00",
+        "soldierCount": 4,
+        "soldiersOnMission": []
+    },
+    {
+        "missionId": 10,
+        "missionType": "MISSION",
+        "startDate": "13/02/2024 18:00",
+        "endDate": "13/02/2024 23:00",
+        "soldierCount": 4,
+        "soldiersOnMission": []
     }
 ]
