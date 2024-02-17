@@ -7,15 +7,15 @@ const { errorHandler } = require('./middlewares/errorHandler');
 const app = express();
 const port = process.env.PORT || 3000;
 const { missionsRouter } = require('./routers/missionRouter');
-const { soldiersRouter } = require('./routers/soldierRouter');
+const { soldierRouter } = require('./routers/soldierRouter');
 const { requestsRouter } = require('./routers/requestRouter');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/missions', missionsRouter);
-app.use('/soldier', soldiersRouter);
-
 app.use(logger('dev'));
+app.use('/missions', missionsRouter);
+app.use('/soldier', soldierRouter);
+
 app.use(errorHandler);
 
 app.use((req, res) => {

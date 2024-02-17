@@ -2,7 +2,7 @@
     {
         "personalNumber": 1234567,
         "fullName": "Ran Lachmi",
-        "class": {
+        "depClass": {
             "classId": 40,
             "className": "Haruvit"
         },
@@ -13,7 +13,7 @@
     {
         "personalNumber": 8765421,
         "fullName": "Eido Peretz",
-        "class": {
+        "depClass": {
             "classId": 40,
             "className": "Haruvit"
         },
@@ -23,7 +23,7 @@
     {
         "personalNumber": 1122334,
         "fullName": "Amit Levi",
-        "class": {
+        "depClass": {
             "classId": 40,
             "className": "Haruvit"
         },
@@ -33,7 +33,7 @@
     {
         "personalNumber": 1233215,
         "fullName": "Idan Itah",
-        "class": {
+        "depClass": {
             "classId": 40,
             "className": "Haruvit"
         },
@@ -43,7 +43,7 @@
     {
         "personalNumber": 9879654,
         "fullName": "Naim Genam",
-        "class": {
+        "depClass": {
             "classId": 40,
             "className": "Haruvit"
         },
@@ -53,7 +53,7 @@
     {
         "personalNumber": 8256412,
         "fullName": "Adi Levi",
-        "class": {
+        "depClass": {
             "classId": 40,
             "className": "Haruvit"
         },
@@ -63,7 +63,7 @@
     {
         "personalNumber": 6546546,
         "fullName": "Moran Sinai",
-        "class": {
+        "depClass": {
             "classId": 40,
             "className": "Haruvit"
         },
@@ -73,7 +73,7 @@
     {
         "personalNumber": 9857656,
         "fullName": "Irit Cohen",
-        "class": {
+        "depClass": {
             "classId": 40,
             "className": "Haruvit"
         },
@@ -83,7 +83,7 @@
     {
         "personalNumber": 1589874,
         "fullName": "Alice Peretz",
-        "class": {
+        "depClass": {
             "classId": 40,
             "className": "Haruvit"
         },
@@ -93,7 +93,7 @@
     {
         "personalNumber": 6589711,
         "fullName": "Guy Yaffe",
-        "class": {
+        "depClass": {
             "classId": 40,
             "className": "Haruvit"
         },
@@ -103,7 +103,7 @@
     {
         "personalNumber": 5555555,
         "fullName": "English Bad",
-        "class": {
+        "depClass": {
             "classId": 40,
             "className": "Haruvit"
         },
@@ -113,7 +113,7 @@
     {
         "personalNumber": 1232323,
         "fullName": "Noam Sinay",
-        "class": {
+        "depClass": {
             "classId": 40,
             "className": "Haruvit"
         },
@@ -123,7 +123,7 @@
     {
         "personalNumber": 1111111,
         "fullName": "Yasmin Adler",
-        "class": {
+        "depClass": {
             "classId": 40,
             "className": "Haruvit"
         },

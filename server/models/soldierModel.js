@@ -4,7 +4,7 @@ const ClassModel = new Schema({
 }, { collection: 'classes' })
 
 const SoldierModel = new Schema({
-    personalNumber: { type: Number, required: true },
+    personalNumber: { type: Number, required: true, unique: true},
     fullName: { type: String, required: true },
     depClass: ClassModel,
     pakal: { type: String, required: true },
