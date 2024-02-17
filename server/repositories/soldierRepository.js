@@ -12,7 +12,7 @@ const createSoldier = (soldier) => this.storage.create(soldier);
 
 const updateSoldier = (id, soldier) => this.storage.update({ _id: id }, soldier);
 
-const deleteSoldier = (soldier) => this.storage.delete(soldier);
+const deleteSoldier = (id) => this.storage.delete({ _id: id });
 
 module.exports = {
     findSoldiers, retrieveSoldier, createSoldier, updateSoldier, deleteSoldier,

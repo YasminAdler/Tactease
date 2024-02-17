@@ -33,7 +33,7 @@ module.exports = class mongoStorage extends EventEmitter {
   }
 
   delete(id) {
-    return this.Model.deleteOne(id);
+    return this.Model.findByIdAndDelete(id);
   }
 
   update(id, data) {
