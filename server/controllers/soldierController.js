@@ -42,7 +42,6 @@ exports.soldiersController = {
             if (
                 !personalNumber
                 || !fullName
-                || !daysOffType
                 || !depClass
                 || !pakal
             ) throw new PropertyNotFoundError('create - missing arguments');
