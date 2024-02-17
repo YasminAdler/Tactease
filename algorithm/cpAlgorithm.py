@@ -5,8 +5,13 @@ from datetime import datetime, timedelta
 from classes.soldier import Soldier
 from functions import getMissions, getSoldiers, datetime_to_hours, hours_to_datetime
 
+MIN_REST_HOURS = 7  # Minimal resting time in hours
+OBSERVATION_PERIOD_HOURS = 24  # Observation window (24 hours)
+
+
 file_path = 'C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/temp-missions.json'
 file_path_soldier = 'C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/temp-db.json'
+
 
 with open(file_path, 'r') as file:
     missions_data = json.load(file)
@@ -15,6 +20,7 @@ missions = getMissions(missions_data)
 
 with open(file_path_soldier, 'r') as file:
     soldiers_data = json.load(file)
+
 
 soldiers = getSoldiers(soldiers_data)
 

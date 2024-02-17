@@ -59,8 +59,6 @@
   "eslint.options": {
     "configFile": "C:/Users/HP/Desktop/Projects/Cpp/.eslintrc.json"
   },
-  "eslint.workingDirectories": [
-
-  ],
+  "eslint.workingDirectories": [],
   "eslint.runtime": ""
 }
