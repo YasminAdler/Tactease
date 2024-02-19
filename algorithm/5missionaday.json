@@ -78,5 +78,85 @@
         "endDate": "13/02/2024 23:00",
         "soldierCount": 4,
         "soldiersOnMission": []
+    },
+    {
+        "missionId": 11,
+        "missionType": "GUARD",
+        "startDate": "14/02/2024 6:00",
+        "endDate": "14/02/2024 10:00",
+        "soldierCount": 2,
+        "soldiersOnMission": []
+    },
+    {
+        "missionId": 12,
+        "missionType": "GUARD",
+        "startDate": "14/02/2024 14:00",
+        "endDate": "14/02/2024 18:00",
+        "soldierCount": 2,
+        "soldiersOnMission": []
+    },
+    {
+        "missionId": 13,
+        "missionType": "WATCH",
+        "startDate": "14/02/2024 18:00",
+        "endDate": "14/02/2024 20:00",
+        "soldierCount": 2,
+        "soldiersOnMission": []
+    },
+    {
+        "missionId": 14,
+        "missionType": "PATROL_BY_CAR",
+        "startDate": "14/02/2024 2:00",
+        "endDate": "14/02/2024 6:00",
+        "soldierCount": 4,
+        "soldiersOnMission": []
+    },
+    {
+        "missionId": 15,
+        "missionType": "MISSION",
+        "startDate": "14/02/2024 18:00",
+        "endDate": "14/02/2024 23:00",
+        "soldierCount": 4,
+        "soldiersOnMission": []
+    },
+    {
+        "missionId": 16,
+        "missionType": "GUARD",
+        "startDate": "15/02/2024 6:00",
+        "endDate": "15/02/2024 10:00",
+        "soldierCount": 2,
+        "soldiersOnMission": []
+    },
+    {
+        "missionId": 17,
+        "missionType": "GUARD",
+        "startDate": "15/02/2024 14:00",
+        "endDate": "15/02/2024 18:00",
+        "soldierCount": 2,
+        "soldiersOnMission": []
+    },
+    {
+        "missionId": 18,
+        "missionType": "WATCH",
+        "startDate": "15/02/2024 18:00",
+        "endDate": "15/02/2024 20:00",
+        "soldierCount": 2,
+        "soldiersOnMission": []
+    },
+    {
+        "missionId": 19,
+        "missionType": "PATROL_BY_CAR",
+        "startDate": "15/02/2024 2:00",
+        "endDate": "15/02/2024 6:00",
+        "soldierCount": 4,
+        "soldiersOnMission": []
+    },
+    {
+        "missionId": 20,
+        "missionType": "MISSION",
+        "startDate": "15/02/2024 18:00",
+        "endDate": "15/02/2024 23:00",
+        "soldierCount": 4,
+        "soldiersOnMission": []
     }
 ]
