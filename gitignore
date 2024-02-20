@@ -8,3 +8,4 @@ package-lock.json
 ./vscode
 ./algorithm/.idea
 ./algorithm/__pycache__
+./algorithm/classes/__pycache__

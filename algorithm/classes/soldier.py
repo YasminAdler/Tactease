@@ -43,3 +43,4 @@ class Soldier:
             if request.request_id == request_id:
                 return request
         return None
+    
