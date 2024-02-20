@@ -1,6 +1,7 @@
 from classes.mission import Mission
 from ortools.sat.python import cp_model
 import json
+import sys
 from datetime import datetime, timedelta
 from classes.soldier import Soldier
 from functions import getMissions, getSoldiers, datetime_to_hours, hours_to_datetime
@@ -10,18 +11,19 @@ MIN_REST_HOURS = 6  # Minimal resting time in hours
 # Enable = 1    
 # Disable = 0
 
-file_path = 'C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/5missionaday.json'
-file_path_soldier = 'C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/temp-soldiers.json'
+# file_path = 'C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/5missionaday.json'
+# file_path_soldier = 'C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/temp-soldiers.json'
 
-with open(file_path, 'r') as file:
-    missions_data = json.load(file)
+# with open(file_path, 'r') as file:
+#     missions_data = json.load(file)
+print(sys.argv[0])
+missions = sys.argv[1]
+# # getMissions(missions_data)
 
-missions = getMissions(missions_data)
+# with open(file_path_soldier, 'r') as file:
+#     soldiers_data = json.load(file)
 
-with open(file_path_soldier, 'r') as file:
-    soldiers_data = json.load(file)
-
-soldiers = getSoldiers(soldiers_data)
+# soldiers = sys.argv[2]
 
 model = cp_model.CpModel()
 

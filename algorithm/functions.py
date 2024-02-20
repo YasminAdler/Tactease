@@ -6,7 +6,7 @@ def getMissions(missions_data):
     missions = []
     for mission_data in missions_data:
         mission = Mission(
-            missionId=str(mission_data["missionId"]),
+            missionId=str(mission_data["_id"]),
             missionType=mission_data["missionType"],
             startDate=mission_data["startDate"],
             endDate=mission_data["endDate"],
