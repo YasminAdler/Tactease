@@ -16,14 +16,14 @@ MIN_REST_HOURS = 6  # Minimal resting time in hours
 
 # with open(file_path, 'r') as file:
 #     missions_data = json.load(file)
-
+print(sys.argv[0])
 missions = sys.argv[1]
 # # getMissions(missions_data)
 
 # with open(file_path_soldier, 'r') as file:
 #     soldiers_data = json.load(file)
 
-soldiers = sys.argv[2]
+# soldiers = sys.argv[2]
 
 model = cp_model.CpModel()
 

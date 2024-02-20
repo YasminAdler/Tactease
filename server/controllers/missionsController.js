@@ -1,12 +1,12 @@
+/* eslint-disable linebreak-style */
 const mongoose = require('mongoose');
 const { PythonShell } = require('python-shell');
-let options = {
-  scriptPath: "../../algorithm"
-}
-PythonShell.run('cpAlgorithm.py', options,(err, results) => {
-  if (err) console.log(err)
-  if (results) console.log(results)
-});
+
+const options = {
+  scriptPath: 'algorithm',
+  mode: 'JSON',
+  args: [],
+};
 // const { spawn } = require('child_process');
 // const executeAlgorithm = async (script,args) => {
 //   // const arguments = args.ToString();
@@ -88,6 +88,11 @@ exports.missionsController = {
       };
       res.status(result.status);
       res.json(result.message || result.data);
+      options.args = [result.data];
+      PythonShell.run('cpAlgorithm.py', options, (err, results) => {
+        if (err) console.log(err);
+        if (results) console.log(results);
+      });
     } catch (error) {
       if (error.name === 'ValidationError') {
         error.status = 400;
