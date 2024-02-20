@@ -12,7 +12,7 @@ const { requestsRouter } = require('./routers/requestRouter');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger('dev'));
-app.use('/missions', missionsRouter);   
+app.use('/missions', missionsRouter);
 app.use('/soldier', soldierRouter);
 
 app.use(errorHandler);

@@ -9,5 +9,4 @@ requestsRouter.post('/', requestsController.createRequest);
 requestsRouter.put('/:requestId', requestsController.updateRequest);
 requestsRouter.delete('/:requestId', requestsController.deleteRequest);
 
-
 module.exports = { requestsRouter };
