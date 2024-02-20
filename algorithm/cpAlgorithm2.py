@@ -10,7 +10,7 @@ MIN_REST_HOURS = 6  # Minimal resting time in hours
 # Enable = 1
 # Disable = 0
 
-file_path = 'C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/5missionaday.json'
+file_path = 'C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/temp-missions.json'
 file_path_soldier = 'C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/temp-soldiers.json'
 
 with open(file_path, 'r') as file:
@@ -27,7 +27,7 @@ model = cp_model.CpModel()
 
 mission_intervals = {}
 
-#
+
 # Create an IntervalVar for each mission
 for mission in missions:
     start_hours = datetime_to_hours(mission.startDate)
@@ -48,7 +48,7 @@ for soldier in soldiers:
         missionId_key = str(mission.missionId)
         soldierId_key = str(soldier.personalNumber)
         soldier_mission_vars[(soldierId_key, missionId_key)] = model.NewBoolVar(
-            f'soldier_{soldierId_key}_mission_{missionId_key}'
+            f'soldier_{soldierId_key}mission{missionId_key}'
         )
 
 
@@ -77,7 +77,7 @@ soldier_mission_vars = {}
 for soldier in soldiers:
     for missionId_key in mission_intervals.keys():
         soldierId_key = str(soldier.personalNumber)
-        soldier_mission_vars[(soldierId_key, missionId_key)] = model.NewBoolVar(f'soldier_{soldierId_key}_mission_{missionId_key}')
+        soldier_mission_vars[(soldierId_key, missionId_key)] = model.NewBoolVar(f'soldier_{soldierId_key}mission{missionId_key}')
 
 # Calculate the total mission hours for each soldier
 soldier_total_hours = {str(soldier.personalNumber): model.NewIntVar(0, 24, f"total_hours_{str(soldier.personalNumber)}") for soldier in soldiers}
@@ -103,11 +103,11 @@ min_mission_count = model.NewIntVar(0, len(missions), 'min_mission_count')
 for hours in soldier_total_hours.values():
     model.Add(max_hours_var >= hours)
     model.Add(min_hours_var <= hours)
-
+    
 for count in soldier_mission_count.values():
     model.Add(max_mission_count >= count)
     model.Add(min_mission_count <= count)
-
+    
 model.Add(max_hours_var - min_hours_var <= 3)
 
 # Objective: Minimize the difference to balance the workload and the number of missions
