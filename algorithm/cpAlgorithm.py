@@ -7,7 +7,7 @@ from functions import getMissions, getSoldiers, datetime_to_hours, hours_to_date
 
 MIN_REST_HOURS = 6  # Minimal resting time in hours
 # OBSERVATION_PERIOD_HOURS = 24  # 1 day
-# Enable = 1
+# Enable = 1    
 # Disable = 0
 
 file_path = 'C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/5missionaday.json'
