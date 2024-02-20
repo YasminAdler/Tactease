@@ -1,132 +1,131 @@
 [
-    {
-        "personalNumber": 1234567,
-        "fullName": "Ran Lachmy",
-        "Class": {
-            "classId": 40,
-            "className": "Haruvit"
+        {
+                "personalNumber": 1234567,
+                "fullName": "Ran Lachmi",
+                "depClass": {
+                        "classId": 40,
+                        "className": "Haruvit"
+                },
+                "pakal": "SNIPER",
+                "requestList": []
         },
-        "pakal": "SNIPER",
-        "requestList": [ ]
-    },
-
-    {
-        "personalNumber": 8765421,
-        "fullName": "Eido Peretz",
-        "Class": {
-            "classId": 40,
-            "className": "Haruvit"
+        {
+                "personalNumber": 8765421,
+                "fullName": "Eido Peretz",
+                "depClass": {
+                        "classId": 40,
+                        "className": "Haruvit"
+                },
+                "pakal": "MAG",
+                "requestList": []
         },
-        "pakal": "MAG",
-        "requestList": []
-    },
-    {
-        "personalNumber": 1122334,
-        "fullName": "Amit Levi",
-        "Class": {
-            "classId": 40,
-            "className": "Haruvit"
+        {
+                "personalNumber": 1122334,
+                "fullName": "Amit Levi",
+                "depClass": {
+                        "classId": 40,
+                        "className": "Haruvit"
+                },
+                "pakal": "ROVAI",
+                "requestList": []
         },
-        "pakal": "ROVAI",
-        "requestList": []
-    },
-    {
-        "personalNumber": 1233215,
-        "fullName": "Idan Itah",
-        "Class": {
-            "classId": 40,
-            "className": "Haruvit"
+        {
+                "personalNumber": 1233215,
+                "fullName": "Idan Itah",
+                "depClass": {
+                        "classId": 40,
+                        "className": "Haruvit"
+                },
+                "pakal": "KALA",
+                "requestList": []
         },
-        "pakal": "KALA",
-        "requestList": []
-    },
-    {
-        "personalNumber": 9879654,
-        "fullName": "Naim Genam",
-        "Class": {
-            "classId": 40,
-            "className": "Haruvit"
+        {
+                "personalNumber": 9879654,
+                "fullName": "Naim Genam",
+                "depClass": {
+                        "classId": 40,
+                        "className": "Haruvit"
+                },
+                "pakal": "METADOR",
+                "requestList": []
         },
-        "pakal": "METADOR",
-        "requestList": []
-    },
-    {
-        "personalNumber": 8256412,
-        "fullName": "Adi Levi",
-        "Class": {
-            "classId": 40,
-            "className": "Haruvit"
+        {
+                "personalNumber": 8256412,
+                "fullName": "Adi Levi",
+                "depClass": {
+                        "classId": 40,
+                        "className": "Haruvit"
+                },
+                "pakal": "MEDIC",
+                "requestList": []
         },
-        "pakal": "MEDIC",
-        "requestList": []
-    },
-    {
-        "personalNumber": 6546546,
-        "fullName": "Moran Sinai",
-        "Class": {
-            "classId": 40,
-            "className": "Haruvit"
+        {
+                "personalNumber": 6546546,
+                "fullName": "Moran Sinai",
+                "depClass": {
+                        "classId": 40,
+                        "className": "Haruvit"
+                },
+                "pakal": "SNIPER",
+                "requestList": []
         },
-        "pakal": "SNIPER",
-        "requestList": []
-    },
-    {
-        "personalNumber": 9857656,
-        "fullName": "Irit Cohen",
-        "Class": {
-            "classId": 40,
-            "className": "Haruvit"
+        {
+                "personalNumber": 9857656,
+                "fullName": "Irit Cohen",
+                "depClass": {
+                        "classId": 40,
+                        "className": "Haruvit"
+                },
+                "pakal": "MAG",
+                "requestList": []
         },
-        "pakal": "MAG",
-        "requestList": []
-    },
-    {
-        "personalNumber": 1589874,
-        "fullName": "Alice Peretz",
-        "Class": {
-            "classId": 40,
-            "className": "Haruvit"
+        {
+                "personalNumber": 1589874,
+                "fullName": "Alice Peretz",
+                "depClass": {
+                        "classId": 40,
+                        "className": "Haruvit"
+                },
+                "pakal": "KALA",
+                "requestList": []
         },
-        "pakal": "KALA",
-        "requestList": []
-    },
-    {
-        "personalNumber": 6589711,
-        "fullName": "Guy Yaffe",
-        "Class": {
-            "classId": 40,
-            "className": "Haruvit"
+        {
+                "personalNumber": 6589711,
+                "fullName": "Guy Yaffe",
+                "depClass": {
+                        "classId": 40,
+                        "className": "Haruvit"
+                },
+                "pakal": "MEDIC",
+                "requestList": []
         },
-        "pakal": "MEDIC",
-        "requestList": []
-    },
-    {
-        "personalNumber": 5555555,
-        "fullName": "English Bad",
-        "Class": {
-            "classId": 40,
-            "className": "Haruvit"
+        {
+                "personalNumber": 5555555,
+                "fullName": "English Bad",
+                "depClass": {
+                        "classId": 40,
+                        "className": "Haruvit"
+                },
+                "pakal": "ROVAI",
+                "requestList": []
         },
-        "pakal": "ROVAI",
-        "requestList": []
-    },
-    {
-        "personalNumber": 1232323,
-        "fullName": "Noam Sinay",
-        "Class": {
-            "classId": 40,
-            "className": "Haruvit"
+        {
+                "personalNumber": 1232323,
+                "fullName": "Noam Sinay",
+                "depClass": {
+                        "classId": 40,
+                        "className": "Haruvit"
+                },
+                "pakal": "CHAIN COMMANDER",
+                "requestList": []
         },
-        "pakal": "CHAIN COMMANDER",
-        "requestList": []
-    },
-    {
-        "personalNumber": 1111111,
-        "fullName": "Yasmin Adler",
-        "Class": {
-            "classId": 40,
-            "className": "Haruvit"
-        },
-        "pakal": "COMMANDER"
-    }
+        {
+                "personalNumber": 1111111,
+                "fullName": "Yasmin Adler",
+                "depClass": {
+                        "classId": 40,
+                        "className": "Haruvit"
+                },
+                "pakal": "COMMANDER"
+        }
 ]

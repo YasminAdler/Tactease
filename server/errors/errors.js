@@ -30,8 +30,17 @@ class BadRequestError extends Error {
   }
 }
 
+class DuplicateError extends Error {
+  constructor(element) {
+    super(`please provide: ${element} with unique personal number`);
+    this.name = 'DuplicateError';
+    this.status = 409;
+  }
+}
+
 module.exports = {
   EntityNotFoundError,
   PropertyNotFoundError,
   BadRequestError,
+  DuplicateError,
 };
