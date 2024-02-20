@@ -1,4 +1,38 @@
 const mongoose = require('mongoose');
+const { PythonShell } = require('python-shell');
+let options = {
+  scriptPath: "../../algorithm"
+}
+PythonShell.run('cpAlgorithm.py', options,(err, results) => {
+  if (err) console.log(err)
+  if (results) console.log(results)
+});
+// const { spawn } = require('child_process');
+// const executeAlgorithm = async (script,args) => {
+//   // const arguments = args.ToString();
+
+//   const py = spawn('python', [script, args]);
+
+//   const result = new Promise((resolve, reject) => {
+//     let output;
+//     py.stdout.on('data', (data) => {
+//       output = JSON.parse(data);
+//     });
+
+//     py.stderr.on('data', (data) => {
+//       console.error(`Python algorithm error: ${data}`);
+//       reject(`Error occurred in ${script}`);
+//     });
+
+//     py.on('exit', (code) => {
+//       console.log(`Python algorithm exited with code ${code}`);
+//       resolve(output);
+//     });
+//   });
+
+//   return result;
+// }
+
 const {
   findMissions,
   retrieveMission,
