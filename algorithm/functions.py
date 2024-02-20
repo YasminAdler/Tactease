@@ -22,8 +22,8 @@ def getSoldiers(soldiers_data):
         soldier = Soldier(
             personalNumber=int(soldier_data["personalNumber"]),
             fullName=str(soldier_data["fullName"]),
-            classId=int(soldier_data['Class']['classId']),
-            className=str(soldier_data['Class']["className"]),
+            classId=int(soldier_data['depClass']['classId']),
+            className=str(soldier_data['depClass']["className"]),
             pakal=str(soldier_data["pakal"]),
             # Assuming requestList contains mission assignment info; adapt as necessary
             )
