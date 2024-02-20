@@ -2,4 +2,9 @@ node_modules
 package-lock.json
 ./algorithm./idea
 .env
-eslintrc.js
+./idea
+./node_modules
+./pytest_cache
+./vscode
+./algorithm/.idea
+./algorithm/__pycache__
