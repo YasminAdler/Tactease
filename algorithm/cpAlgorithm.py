@@ -192,40 +192,58 @@ for soldier in soldiers:
 solver = cp_model.CpSolver()
 status = solver.Solve(model)
 
+# if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
+#     print("Solution Found:")
+#     missions_details = []
+#     for mission in missions:
+#         missionId_key = str(mission.missionId)
+#         if missionId_key in mission_intervals:
+#             interval_var = mission_intervals[missionId_key]
+#             start_hours = solver.Value(interval_var.StartExpr())
+#             end_hours = solver.Value(interval_var.EndExpr())
+#             start_datetime = hours_to_datetime(start_hours)
+#             end_datetime = hours_to_datetime(end_hours)
+#             assigned_soldiers = []
+#             for soldier in soldiers:
+#                 soldierId_key = str(soldier.personalNumber)
+#                 if solver.BooleanValue(soldier_mission_vars[(soldierId_key, missionId_key)]):
+#                     # Storing soldier's full name directly
+#                     assigned_soldiers.append(soldier.fullName)
+#             # Append tuple with mission ID, start datetime, and list of assigned soldiers
+#             missions_details.append(
+#                 (missionId_key, start_datetime, end_datetime, assigned_soldiers))
+#         else:
+#             print(f"Mission ID {missionId_key} not found in mission_intervals")
+
+#     # Sort missions by start dateti  q  me
+#     missions_details.sort(key=lambda x: x[1])
+
+#     # Print sorted missions
+#     for mission_detail in missions_details:
+#         missionId_key, start_datetime, end_datetime, assigned_soldiers = mission_detail
+#         print(
+#             f"Mission {missionId_key} starts at {start_datetime} and ends at {end_datetime}. Assigned Soldiers: {assigned_soldiers}")
+# else:
+#     print("No solution was found.")
+#     print("Solver status:", status)
+#     print("Solver statistics:")
+#     print(solver.ResponseStats())
+ 
+ 
 if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
-    print("Solution Found:")
-    missions_details = []
+    missionJson = []
     for mission in missions:
         missionId_key = str(mission.missionId)
         if missionId_key in mission_intervals:
-            interval_var = mission_intervals[missionId_key]
-            start_hours = solver.Value(interval_var.StartExpr())
-            end_hours = solver.Value(interval_var.EndExpr())
-            start_datetime = hours_to_datetime(start_hours)
-            end_datetime = hours_to_datetime(end_hours)
             assigned_soldiers = []
             for soldier in soldiers:
                 soldierId_key = str(soldier.personalNumber)
                 if solver.BooleanValue(soldier_mission_vars[(soldierId_key, missionId_key)]):
-                    # Storing soldier's full name directly
-                    assigned_soldiers.append(soldier.fullName)
-            # Append tuple with mission ID, start datetime, and list of assigned soldiers
-            missions_details.append(
-                (missionId_key, start_datetime, end_datetime, assigned_soldiers))
-        else:
-            print(f"Mission ID {missionId_key} not found in mission_intervals")
-
-    # Sort missions by start dateti  q  me
-    missions_details.sort(key=lambda x: x[1])
-
-    # Print sorted missions
-    for mission_detail in missions_details:
-        missionId_key, start_datetime, end_datetime, assigned_soldiers = mission_detail
-        print(
-            f"Mission {missionId_key} starts at {start_datetime} and ends at {end_datetime}. Assigned Soldiers: {assigned_soldiers}")
+                    assigned_soldiers.append(soldier.personalNumber)
+            missionJson.append({missionId_key: assigned_soldiers})
+    print(missionJson)
 else:
     print("No solution was found.")
     print("Solver status:", status)
     print("Solver statistics:")
     print(solver.ResponseStats())
- 
