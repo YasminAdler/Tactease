@@ -26,8 +26,6 @@ soldiers = getSoldiers(soldiers_data)
 model = cp_model.CpModel()
 
 mission_intervals = {}
-
-
 # Create an IntervalVar for each mission
 for mission in missions:
     start_hours = datetime_to_hours(mission.startDate)
@@ -53,13 +51,12 @@ for soldier in soldiers:
 
 
 # Constraint: Each mission must be assigned at least one soldier and by required soldiers number for the mission
-for missionId_key in mission_intervals.keys():
-    required_soldiers = next((mission.soldierCount for mission in missions if str(mission.missionId) == missionId_key), None)
-    if required_soldiers is not None:
-        model.Add(sum(soldier_mission_vars[(str(soldier.personalNumber), missionId_key)] for soldier in soldiers) >= required_soldiers)
+# for missionId_key in mission_intervals.keys():
+#     required_soldiers = next((mission.soldierCount for mission in missions if str(mission.missionId) == missionId_key), None)
+#     if required_soldiers is not None:
+#         model.Add(sum(soldier_mission_vars[(str(soldier.personalNumber), missionId_key)] for soldier in soldiers) >= required_soldiers)
+
 # try: constraint: fair durations:
-
-
 # Constraint: Balance mission hours among soldiers as evenly as possible
 # Calculate the total mission hours for each soldier
 soldier_total_hours = {str(soldier.personalNumber): model.NewIntVar(0, 24, f"total_hours_{str(soldier.personalNumber)}") for soldier in soldiers}
