@@ -5,8 +5,8 @@ from algorithm.cpAlgorithmModuled import generate_mission_schedule
 app = Flask(__name__)
 
 # Replace these URLs with the actual URLs of your Node server
-MISSIONS_URL = 'http://localhost:3000/missions'
-SOLDIERS_URL = 'http://localhost:3000/soldiers'
+MISSIONS_URL = 'http://localhost:3030/missions'
+SOLDIERS_URL = 'http://localhost:3030/soldiers'
 
 @app.route('/')
 def home():
