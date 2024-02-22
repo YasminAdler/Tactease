@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const mongoose = require('mongoose');
 
 const {
@@ -6,6 +7,7 @@ const {
   createSoldier,
   updateSoldier,
   deleteSoldier,
+  retrieveSoldierByClass,
 } = require('../repositories/soldierRepository');
 const { EntityNotFoundError, PropertyNotFoundError, BadRequestError } = require('../errors/errors');
 
@@ -14,6 +16,16 @@ exports.soldiersController = {
     try {
       const soldier = await findSoldiers();
       if (!soldier || soldier.length === 0) throw new EntityNotFoundError('Soldier');
+      res.status(200).json(soldier);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async getSoldiersByClassId(req, res, next, classId) {
+    try {
+      const soldier = await retrieveSoldierByClass(classId);
+      if (!soldier || soldier.length === 0) throw new EntityNotFoundError(`class with id <${classId}>`);
       res.status(200).json(soldier);
     } catch (error) {
       next(error);

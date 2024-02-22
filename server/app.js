@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 require('express-async-errors');
 const express = require('express');
 const logger = require('morgan');
@@ -7,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const { missionsRouter } = require('./routers/missionRouter');
 const { soldierRouter } = require('./routers/soldierRouter');
-const { requestsRouter } = require('./routers/requestRouter');
+// const { requestsRouter } = require('./routers/requestRouter');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

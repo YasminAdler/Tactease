@@ -9,6 +9,8 @@ const findSoldiers = () => this.storage.find({});
 
 const retrieveSoldier = (id) => this.storage.retrieve({ _id: id });
 
+const retrieveSoldierByClass = (id) => this.storage.retrieveByClass({ 'depClass.classId': id });
+
 const createSoldier = async (soldier) => {
   try {
     return await this.storage.create(soldier);
@@ -22,5 +24,6 @@ const updateSoldier = (id, soldier) => this.storage.update({ _id: id }, soldier)
 const deleteSoldier = (id) => this.storage.delete({ _id: id });
 
 module.exports = {
-  findSoldiers, retrieveSoldier, createSoldier, updateSoldier, deleteSoldier,
+  // eslint-disable-next-line max-len
+  findSoldiers, retrieveSoldier, createSoldier, updateSoldier, deleteSoldier, retrieveSoldierByClass,
 };
