@@ -33,11 +33,9 @@ module.exports = class mongoStorage extends EventEmitter {
 
   create(data) {
     if (Array.isArray(data)) {
-      console.log('data:', data);
       return this.Model.insertMany(data);
     }
-    console.log('data:', data);
-    return this.Model(data);
+    return this.Model.create(data);
   }
 
   delete(id) {

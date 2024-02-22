@@ -15,6 +15,9 @@ exports.algorithmController = {
       const missionsJSON = JSON.stringify(missionRes);
       const soldiersJSON = JSON.stringify(soldiersRes);
 
+      console.log('missionsJSON:', missionsJSON);
+      console.log('soldiersJSON:', soldiersJSON);
+
       // const dataToPass = {
       //   dataSend: [missionsJSON, soldiersJSON],
       //   dataRecieve: {},

@@ -1,13 +1,18 @@
 # from classes.mission import Mission
 from ortools.sat.python import cp_model
-# import sys
+import os.path
+import sys
 import json
 from datetime import datetime, timedelta
-from classes.soldier import Soldier
+# from classes.soldier import Soldier
 from collections import defaultdict
 from functions import getMissions, getSoldiers, datetime_to_hours, hours_to_datetime
-import ast
+# sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append('./algorithm/classes')
 
+# import ast
+
+# print(sys.path)
     # from subprocess import Popen, PIPE
 
     # server = Popen(['node', '../server/middlewares/algorithm.js'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
