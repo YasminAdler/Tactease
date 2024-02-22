@@ -7,9 +7,9 @@ from classes.soldier import Soldier
 from collections import defaultdict
 from functions import getMissions, getSoldiers, datetime_to_hours, hours_to_datetime
 
-# from subprocess import Popen, PIPE
+    # from subprocess import Popen, PIPE
 
-# server = Popen(['node', '../server/middlewares/algorithm.js'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    # server = Popen(['node', '../server/middlewares/algorithm.js'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
 MIN_REST_HOURS = 6  # Minimal resting time in hours
 
@@ -19,7 +19,10 @@ arg2 = sys.argv[2]
 missions = getMissions(json.loads(arg1))
 soldiers = getSoldiers(json.loads(arg2))
 
-
+with open('algorithm/mission_data.txt', 'w') as f:
+    f.write(missions)
+    f.write(soldiers)
+    
 model = cp_model.CpModel()
 
 mission_intervals = {}
@@ -44,22 +47,22 @@ for soldier in soldiers:
         soldierId_key = str(soldier.personalNumber)
         soldier_mission_vars[(soldierId_key, missionId_key)] = model.NewBoolVar(
             f'soldier_{soldierId_key}mission{missionId_key}'
-        )
+       )
 
-# try: constraint: fair durations:
+    # try: constraint: fair durations:
 
-# Constraint: Balance mission hours among soldiers as evenly as possible
-#             Calculate the total mission hours for each soldier
+    # Constraint: Balance mission hours among soldiers as evenly as possible
+    #             Calculate the total mission hours for each soldier
 
-soldier_total_hours = {str(soldier.personalNumber): model.NewIntVar(0, 24, f"total_hours_{str(soldier.personalNumber)}") for soldier in soldiers}
-mission_durations = {}
-for mission in missions:
-    start_hours = datetime_to_hours(mission.startDate)
-    end_hours = datetime_to_hours(mission.endDate)
-    duration_hours = end_hours - start_hours
-    missionId_key = str(mission.missionId)
-    mission_intervals[missionId_key] = model.NewIntervalVar(start_hours, duration_hours, end_hours, f'mission_interval_{missionId_key}')
-    mission_durations[missionId_key] = duration_hours
+    soldier_total_hours = {str(soldier.personalNumber): model.NewIntVar(0, 24, f"total_hours_{str(soldier.personalNumber)}") for soldier in soldiers}
+    mission_durations = {}
+    for mission in missions:
+        start_hours = datetime_to_hours(mission.startDate)
+        end_hours = datetime_to_hours(mission.endDate)
+        duration_hours = end_hours - start_hours
+        missionId_key = str(mission.missionId)
+        mission_intervals[missionId_key] = model.NewIntervalVar(start_hours, duration_hours, end_hours, f'mission_interval_{missionId_key}')
+        mission_durations[missionId_key] = duration_hours
 
 # Calculate the total mission hours for each soldier
 soldier_total_hours = {str(soldier.personalNumber): model.NewIntVar(0, 24, f"total_hours_{str(soldier.personalNumber)}") for soldier in soldiers}
@@ -97,7 +100,7 @@ model.Minimize(max_hours_var - min_hours_var + (max_mission_count - min_mission_
 
 
 
-# end of constraint fair durations
+    # end of constraint fair durations
 
 def dis_en_able_constraints(flag, action):
     flag = action
@@ -125,8 +128,8 @@ for soldier in soldiers:
     # This variable is 1 if the soldier is assigned to any mission, 0 otherwise
     soldier_assigned_vars[soldier_id] = model.NewBoolVar(f'soldier_assigned_{soldier_id}')
 
-##########################
-# constraint : Soldiers should be assigned equally
+    ##########################
+    # constraint : Soldiers should be assigned equally
 
 total_mission_hours = sum(mission_durations.values())
 missions_by_date = defaultdict(list)
@@ -168,9 +171,9 @@ for soldier in soldiers:
             model.Add(total_hours_for_date >= avg_hours)
             model.Add(total_hours_for_date <= upper_limit_hours)
 
-#####################################
+    #####################################
 
-# end of constraint fair durations
+    # end of constraint fair durations
 
 for soldier in soldiers:
     soldier_id = str(soldier.personalNumber)
@@ -188,31 +191,31 @@ for soldier in soldiers:
 solver = cp_model.CpSolver()
 status = solver.Solve(model)
 
-# if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
-#     print("Solution Found:")
-#     missions_details = []
-#     for mission in missions:
-#         missionId_key = str(mission.missionId)
-#         if missionId_key in mission_intervals:
-#             interval_var = mission_intervals[missionId_key]
-#             start_hours = solver.Value(interval_var.StartExpr())
-#             end_hours = solver.Value(interval_var.EndExpr())
-#             start_datetime = hours_to_datetime(start_hours)
-#             end_datetime = hours_to_datetime(end_hours)
-#             assigned_soldiers = []
-#             for soldier in soldiers:
-#                 soldierId_key = str(soldier.personalNumber)
-#                 if solver.BooleanValue(soldier_mission_vars[(soldierId_key, missionId_key)]):
-#                     # Storing soldier's full name directly
-#                     assigned_soldiers.append(soldier.fullName)
-#             # Append tuple with mission ID, start datetime, and list of assigned soldiers
-#             missions_details.append(
-#                 (missionId_key, start_datetime, end_datetime, assigned_soldiers))
-#         else:
-#             print(f"Mission ID {missionId_key} not found in mission_intervals")
+    # if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
+    #     print("Solution Found:")
+    #     missions_details = []
+    #     for mission in missions:
+    #         missionId_key = str(mission.missionId)
+    #         if missionId_key in mission_intervals:
+    #             interval_var = mission_intervals[missionId_key]
+    #             start_hours = solver.Value(interval_var.StartExpr())
+    #             end_hours = solver.Value(interval_var.EndExpr())
+    #             start_datetime = hours_to_datetime(start_hours)
+    #             end_datetime = hours_to_datetime(end_hours)
+    #             assigned_soldiers = []
+    #             for soldier in soldiers:
+    #                 soldierId_key = str(soldier.personalNumber)
+    #                 if solver.BooleanValue(soldier_mission_vars[(soldierId_key, missionId_key)]):
+    #                     # Storing soldier's full name directly
+    #                     assigned_soldiers.append(soldier.fullName)
+    #             # Append tuple with mission ID, start datetime, and list of assigned soldiers
+    #             missions_details.append(
+    #                 (missionId_key, start_datetime, end_datetime, assigned_soldiers))
+    #         else:
+    #             print(f"Mission ID {missionId_key} not found in mission_intervals")
 
-#     # Sort missions by start dateti  q  me
-#     missions_details.sort(key=lambda x: x[1])
+    #     # Sort missions by start dateti  q  me
+    #     missions_details.sort(key=lambda x: x[1])
 
 #     # Print sorted missions
 #     for mission_detail in missions_details:

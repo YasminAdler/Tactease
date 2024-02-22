@@ -21,9 +21,10 @@ exports.algorithmController = {
       PythonShell.run('cpAlgorithm.py', options, (err, algRes) => {
         if (err) throw err;
         if (!algRes || algRes.length === 0) throw new BadRequestError('algorithm: algRes is empty');
+        const missionJson = JSON.parse(algRes[0]);
         
-        console.log('algRes:', algRes);
-        res.status(200).json(algRes);
+        console.log('algRes:', missionJson);
+        res.status(200).json(missionJson);
       });
       
     } catch (error) {
