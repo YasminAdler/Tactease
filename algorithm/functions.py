@@ -2,6 +2,21 @@ from datetime import datetime, timedelta
 from classes.mission import Mission
 from classes.soldier import Soldier
 
+
+def getMissions(missions_data):
+    missions = []
+    for mission_data in missions_data:
+        mission = Mission(
+            missionId=str(mission_data["missionId"]),
+            missionType=mission_data["missionType"],
+            startDate=mission_data["startDate"],
+            endDate=mission_data["endDate"],
+            soldierCount=int(mission_data["soldierCount"]),
+            soldiersOnMission=mission_data.get("soldiersOnMission", [])
+        )
+        missions.append(mission)
+    return missions
+
 # def getMissions(missions_data):
 #     missions = []
 #     for mission_data in missions_data:
@@ -21,27 +36,27 @@ from classes.soldier import Soldier
 #         missions.append(mission)
 #     return missions
 
-def getMissions(missions_data):
-    missions = []
-    try:
-        for mission_data in missions_data:
-            with open('algorithm/mission_data.txt', 'w') as f:
-                f.write(mission_data)
-                f.write('"missions_data:", missions_data\n"missions_data type:", type(missions_data)\n\n\n')
-            parsedDateStart = datetime.fromisoformat(mission_data["startDate"].replace('Z', '+00:00'))  # Convert to datetime object
-            parsedDateEnd = datetime.fromisoformat(mission_data["endDate"].replace('Z', '+00:00'))  # Convert to datetime object
-            mission = Mission(
-                missionId=str(mission_data["_id"]),
-                missionType=mission_data["missionType"],
-                startDate= parsedDateStart.strftime('%d/%m/%Y %H:%M'),
-                endDate= parsedDateEnd.strftime('%d/%m/%Y %H:%M'),
-                soldierCount=int(mission_data["soldierCount"]),
-                soldiersOnMission=mission_data.get("soldiersOnMission", [])
-            )
-            missions.append(mission)
-    except Exception as e:
-        print("Error occurred:", e)
-    return missions
+# def getMissions(missions_data):
+#     missions = []
+#     try:
+#         for mission_data in missions_data:
+#             with open('algorithm/mission_data.txt', 'w') as f:
+#                 f.write(mission_data)
+#                 f.write('"missions_data:", missions_data\n"missions_data type:", type(missions_data)\n\n\n')
+#             parsedDateStart = datetime.fromisoformat(mission_data["startDate"].replace('Z', '+00:00'))  # Convert to datetime object
+#             parsedDateEnd = datetime.fromisoformat(mission_data["endDate"].replace('Z', '+00:00'))  # Convert to datetime object
+#             mission = Mission(
+#                 missionId=str(mission_data["_id"]),
+#                 missionType=mission_data["missionType"],
+#                 startDate= parsedDateStart.strftime('%d/%m/%Y %H:%M'),
+#                 endDate= parsedDateEnd.strftime('%d/%m/%Y %H:%M'),
+#                 soldierCount=int(mission_data["soldierCount"]),
+#                 soldiersOnMission=mission_data.get("soldiersOnMission", [])
+#             )
+#             missions.append(mission)
+#     except Exception as e:
+#         print("Error occurred:", e)
+#     return missions
 
 
 def getSoldiers(soldiers_data):
