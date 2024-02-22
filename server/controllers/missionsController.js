@@ -62,25 +62,28 @@ exports.missionsController = {
           message: '',
           data: await createMission(req.body),
         };
-        res.status(result.status);
-        res.json(result.message || result.data);
-        options.args = [result.data];
-      } else {
-        for (const mission of req.body) {
-          const {
-            missionType, startDate, endDate, soldierCount,
-          } = mission;
-          if (!missionType || !startDate || !endDate || !soldierCount) throw new PropertyNotFoundError('mission - missing arguments');
-        }
-        const result = {
-          status: 201,
-          message: '',
-          data: await createMission(req.body),
-        };
-        options.args = [result.data];
-        res.status(result.status);
-        res.json(result.message || result.data);
+        return result.data;
+        // res.status(result.status);
+        // res.json(result.message || result.data);
+        // options.args = [result.data];
       }
+      for (const mission of req.body) {
+        const {
+          missionType, startDate, endDate, soldierCount,
+        } = mission;
+        if (!missionType || !startDate || !endDate || !soldierCount) throw new PropertyNotFoundError('mission - missing arguments');
+      }
+      const result = {
+        status: 201,
+        message: '',
+        data: await createMission(req.body),
+      };
+      return result.data;
+
+      // options.args = [result.data];
+      // res.status(result.status);
+      // res.json(result.message || result.data);
+
       // PythonShell.run('cpAlgorithm.py', options, (err, results) => {
       //   if (err) console.log(err);
       //   if (results) console.log(results);

@@ -13,17 +13,19 @@ exports.algorithmController = {
   async executeAlgorithm(req, res, next) {
     try {
       const missionRes = await missionsController.addMission(req, res, next);
-      if (!missionRes || missionRes.length === 0) throw new BadRequestError('algorith: missionRes is empty');
-
+      if (!missionRes || missionRes.length === 0) throw new BadRequestError('algorithm: missionRes is empty');
       //const { classId } = missionRes.data.depClass;
       const soldiersRes = await soldiersController.getSoldiersByClassId(req, res, next, 40);
-      if (!missionRes || missionRes.length === 0) throw new BadRequestError('algorith: soldiersRes is empty');
-
-      options.args = [missionRes, soldiersRes];
-      const algRes = await PythonShell.run('cpAlgorithm.py', options);
-      if (!algRes || algRes.length === 0) throw new BadRequestError('algorith: algRes is empty');
-
-      res.status(200).json(algRes);
+      if (!missionRes || missionRes.length === 0) throw new BadRequestError('algorithm: soldiersRes is empty');
+      options.args = [JSON.stringify(missionRes), JSON.stringify(soldiersRes)];
+      PythonShell.run('cpAlgorithm.py', options, (err, algRes) => {
+        if (err) throw err;
+        if (!algRes || algRes.length === 0) throw new BadRequestError('algorithm: algRes is empty');
+        
+        console.log('algRes:', algRes);
+        res.status(200).json(algRes);
+      });
+      
     } catch (error) {
       next(error);
     }

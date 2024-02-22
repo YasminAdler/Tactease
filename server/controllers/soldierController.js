@@ -26,7 +26,8 @@ exports.soldiersController = {
     try {
       const soldier = await retrieveSoldierByClass(classId);
       if (!soldier || soldier.length === 0) throw new EntityNotFoundError(`class with id <${classId}>`);
-      res.status(200).json(soldier);
+      return soldier;
+    //  res.status(200).json(soldier);
     } catch (error) {
       next(error);
     }

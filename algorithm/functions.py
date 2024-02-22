@@ -5,11 +5,13 @@ from classes.soldier import Soldier
 def getMissions(missions_data):
     missions = []
     for mission_data in missions_data:
+        parsedDateStart = datetime.fromisoformat(mission_data["startDate"].replace('Z', '+00:00'))  # Convert to datetime object
+        parsedDateEnd = datetime.fromisoformat(mission_data["endDate"].replace('Z', '+00:00'))  # Convert to datetime object
         mission = Mission(
             missionId=str(mission_data["_id"]),
             missionType=mission_data["missionType"],
-            startDate=mission_data["startDate"],
-            endDate=mission_data["endDate"],
+            startDate= parsedDateStart.strftime('%d/%m/%Y %H:%M'),
+            endDate= parsedDateEnd.strftime('%d/%m/%Y %H:%M'),
             soldierCount=int(mission_data["soldierCount"]),
             soldiersOnMission=mission_data.get("soldiersOnMission", [])
         )

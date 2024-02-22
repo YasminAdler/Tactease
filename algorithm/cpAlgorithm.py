@@ -1,28 +1,24 @@
 from classes.mission import Mission
 from ortools.sat.python import cp_model
+import sys
 import json
 from datetime import datetime, timedelta
 from classes.soldier import Soldier
 from collections import defaultdict
 from functions import getMissions, getSoldiers, datetime_to_hours, hours_to_datetime
 
+# from subprocess import Popen, PIPE
+
+# server = Popen(['node', '../server/middlewares/algorithm.js'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+
 MIN_REST_HOURS = 6  # Minimal resting time in hours
-# OBSERVATION_PERIOD_HOURS = 24  # 1 day
-# Enable = 1
-# Disable = 0
 
-file_path = 'C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/temp-missions.json'
-file_path_soldier = 'C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/temp-soldiers.json'
+arg1 = sys.argv[1]
+arg2 = sys.argv[2]
 
-with open(file_path, 'r') as file:
-    missions_data = json.load(file)
+missions = getMissions(json.loads(arg1))
+soldiers = getSoldiers(json.loads(arg2))
 
-missions = getMissions(missions_data)
-
-with open(file_path_soldier, 'r') as file:
-    soldiers_data = json.load(file)
-
-soldiers = getSoldiers(soldiers_data)
 
 model = cp_model.CpModel()
 
@@ -241,7 +237,10 @@ if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
                 if solver.BooleanValue(soldier_mission_vars[(soldierId_key, missionId_key)]):
                     assigned_soldiers.append(soldier.personalNumber)
             missionJson.append({missionId_key: assigned_soldiers})
-    print(missionJson)
+    mission_json_str = json.dumps(missionJson)
+    # Send mission_json_str to stdout
+    print(mission_json_str)
+
 else:
     print("No solution was found.")
     print("Solver status:", status)
