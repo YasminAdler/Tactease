@@ -1,16 +1,16 @@
-const { BadRequestError } = require('../errors/errors');
+const spawner = require('child_process').spawn;
 const { soldiersController } = require('../controllers/soldierController');
 const { missionsController } = require('../controllers/missionsController');
-const spawner = require('child_process').spawn;
+const { EntityNotFoundError } = require('../errors/errors');
 
 exports.algorithmController = {
   async executeAlgorithm(req, res, next) {
     try {
       const missionRes = await missionsController.addMission(req, res, next);
-      if (!missionRes || missionRes.length === 0) throw new BadRequestError('algorithm: missionRes is empty');
+      if (!missionRes || missionRes.length === 0) throw new EntityNotFoundError('algorithm: missionRes is empty');
 
       const soldiersRes = await soldiersController.getSoldiersByClassId(req, res, next, 40);
-      if (!missionRes || missionRes.length === 0) throw new BadRequestError('algorithm: soldiersRes is empty');
+      if (!soldiersRes || soldiersRes.length === 0) throw new EntityNotFoundError('algorithm: soldiersRes is empty');
 
       const missionsJSON = JSON.stringify(missionRes);
       const soldiersJSON = JSON.stringify(soldiersRes);

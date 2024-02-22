@@ -31,6 +31,7 @@ exports.soldiersController = {
     } catch (error) {
       next(error);
     }
+    return null; // Add this line to return a value at the end of the method
   },
 
   async getSoldierById(req, res, next) {

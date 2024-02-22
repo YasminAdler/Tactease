@@ -1,12 +1,5 @@
 /* eslint-disable linebreak-style */
 const mongoose = require('mongoose');
-const { PythonShell } = require('python-shell');
-
-const options = {
-  scriptPath: 'algorithm',
-  mode: 'JSON',
-  args: [],
-};
 
 const {
   findMissions,
@@ -16,6 +9,15 @@ const {
   deleteMission,
 } = require('../repositories/missionsRepository');
 const { EntityNotFoundError, PropertyNotFoundError, BadRequestError } = require('../errors/errors');
+
+const validateMission = (mission) => {
+  const {
+    missionType, startDate, endDate, soldierCount,
+  } = mission;
+  if (!missionType || !startDate || !endDate || !soldierCount) {
+    throw new PropertyNotFoundError('validate mission - missing arguments');
+  }
+};
 
 exports.missionsController = {
   async getMissions(req, res, next) {
