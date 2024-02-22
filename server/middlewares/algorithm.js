@@ -20,32 +20,44 @@ exports.algorithmController = {
       //   dataRecieve: {},
       // };
 
-      let retrievedData = '';
+      // let retrievedData = '';
 
-      const pythonProcess = spawner('python3', ['-c', `import algorithm.cpAlgorithm; algorithm.cpAlgorithm.scheduleAlg(${missionsJSON}, ${soldiersJSON})`]);
+      const pythonProcess = spawner('python', ['-c', `import algorithm.cpAlgorithm; algorithm.cpAlgorithm.scheduleAlg(${missionsJSON}, ${soldiersJSON})`]);
 
       pythonProcess.stdout.on('data', (data) => {
-        retrievedData += JSON.stringify(data);
+        const retrievedData = JSON.parse(data.toString());
         if (!res.headersSent) { // Check if headers have already been sent
           res.status(200).json(retrievedData);
-          console.log(retrievedData);
         }
-        // res.status(200).json(retreivedData);
       });
 
+      let errorData = ''; // Store error data
       pythonProcess.stderr.on('data', (data) => {
         console.error(`stderr: ${data}`);
-        res.status(400).json(data);
+        errorData += data.toString(); // Append error data
       });
-      // pythonProcess.stdout.pipe(process.stdout);
+
+      // Handle process close event
       pythonProcess.on('close', (code) => {
-        if (code === 0) {
-          const parsedData = JSON.parse(retrievedData);
-          res.status(200).json(parsedData);
-        } else {
-          console.log(`child process exited with code ${code}`);
+        // If the process exits with an error code and the response hasn't been sent yet
+        if (code !== 0 && !res.headersSent) {
+          res.status(400).json({ error: errorData }); // Send error response
         }
       });
+
+      // pythonProcess.stdout.on('data', (data) => {
+      //   const retrievedData = JSON.parse(data.toString());
+      //   if (!res.headersSent) { // Check if headers have already been sent
+      //     res.status(200).json(retrievedData);
+      //     // console.log(retrievedData);
+      //   }
+      //   // res.status(200).json(retreivedData);
+      // });
+
+      // pythonProcess.stderr.on('data', (data) => {
+      //   console.error(`stderr: ${data}`);
+      //   res.status(400).json(data);
+      // });
     } catch (error) {
       next(error);
     }
