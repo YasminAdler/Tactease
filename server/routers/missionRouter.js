@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { missionsController } = require('../controllers/missionsController');
-const {algorithmController} = require('../middlewares/algorithm');
+const { algorithmController } = require('../middlewares/algorithm');
 
 const missionsRouter = new Router();
 

@@ -6,18 +6,21 @@ from datetime import datetime, timedelta
 from classes.soldier import Soldier
 from collections import defaultdict
 from functions import getMissions, getSoldiers, datetime_to_hours, hours_to_datetime
+import ast
 
     # from subprocess import Popen, PIPE
 
     # server = Popen(['node', '../server/middlewares/algorithm.js'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
+dataTosend = {}
+
 MIN_REST_HOURS = 6  # Minimal resting time in hours
 
-arg1 = sys.argv[1]
-arg2 = sys.argv[2]
+dataRecived = ast.iteral_eval(sys.argv[1])
+# arg2 = ast.iteral_eval(sys.argv[2])
 
-missions = getMissions(json.loads(arg1))
-soldiers = getSoldiers(json.loads(arg2))
+missions = getMissions(json.loads(dataRecived['dataSend'][0]))
+soldiers = getSoldiers(json.loads(dataRecived['dataSend'][1]))
 
 with open('algorithm/mission_data.txt', 'w') as f:
     f.write(missions)
@@ -241,11 +244,10 @@ if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
                     assigned_soldiers.append(soldier.personalNumber)
             missionJson.append({missionId_key: assigned_soldiers})
     mission_json_str = json.dumps(missionJson)
-    # Send mission_json_str to stdout
-    print(mission_json_str)
-
+    dataTosend = {mission_json_str}
 else:
-    print("No solution was found.")
-    print("Solver status:", status)
-    print("Solver statistics:")
-    print(solver.ResponseStats())
+    dataTosend = {"error": "No solution was found:\n" + solver.ResponseStats()}
+
+dataRecived['dataFromPython'] = dataTosend
+sys.stdout.write(json.dumps(dataRecived))
+sys.stdout.flush()
