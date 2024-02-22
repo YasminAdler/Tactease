@@ -15,8 +15,8 @@ exports.algorithmController = {
       const missionRes = await missionsController.addMission(req, res, next);
       if (!missionRes || missionRes.length === 0) throw new BadRequestError('algorith: missionRes is empty');
 
-      const { classId } = missionRes.data.depClass;
-      const soldiersRes = await soldiersController.getSoldiersByClassId(req, res, next, classId);
+      //const { classId } = missionRes.data.depClass;
+      const soldiersRes = await soldiersController.getSoldiersByClassId(req, res, next, 40);
       if (!missionRes || missionRes.length === 0) throw new BadRequestError('algorith: soldiersRes is empty');
 
       options.args = [missionRes, soldiersRes];

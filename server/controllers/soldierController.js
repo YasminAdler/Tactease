@@ -21,6 +21,16 @@ exports.soldiersController = {
     }
   },
 
+  async getSoldiersByClassId(req, res, next, classId) {
+    try {
+      const soldier = await retrieveSoldier(classId);
+      if (!soldier || soldier.length === 0) throw new EntityNotFoundError(`class with id <${classId}>`);
+      res.status(200).json(soldier);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   async getSoldierById(req, res, next) {
     const { soldierId } = req.params;
     try {
