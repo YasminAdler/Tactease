@@ -162,7 +162,7 @@ def generate_mission_schedule(arg1, arg2):
             total_hours += duration_hours
         total_hours_per_day[date] = total_hours
         avarage_mission_hours_for_soldier[date] = total_hours_per_day[date]/len(soldiers)
-    print(avarage_mission_hours_for_soldier)
+    # print(avarage_mission_hours_for_soldier)
 
     for soldier in soldiers:
         for date, avg_hours in avarage_mission_hours_for_soldier.items():
@@ -204,31 +204,31 @@ def generate_mission_schedule(arg1, arg2):
     solver = cp_model.CpSolver()
     status = solver.Solve(model)
 
-        # if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
-        #     print("Solution Found:")
-        #     missions_details = []
-        #     for mission in missions:
-        #         missionId_key = str(mission.missionId)
-        #         if missionId_key in mission_intervals:
-        #             interval_var = mission_intervals[missionId_key]
-        #             start_hours = solver.Value(interval_var.StartExpr())
-        #             end_hours = solver.Value(interval_var.EndExpr())
-        #             start_datetime = hours_to_datetime(start_hours)
-        #             end_datetime = hours_to_datetime(end_hours)
-        #             assigned_soldiers = []
-        #             for soldier in soldiers:
-        #                 soldierId_key = str(soldier.personalNumber)
-        #                 if solver.BooleanValue(soldier_mission_vars[(soldierId_key, missionId_key)]):
-        #                     # Storing soldier's full name directly
-        #                     assigned_soldiers.append(soldier.fullName)
-        #             # Append tuple with mission ID, start datetime, and list of assigned soldiers
-        #             missions_details.append(
-        #                 (missionId_key, start_datetime, end_datetime, assigned_soldiers))
-        #         else:
-        #             print(f"Mission ID {missionId_key} not found in mission_intervals")
+    # if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
+    #     print("Solution Found:")
+    #     missions_details = []
+    #     for mission in missions:
+    #         missionId_key = str(mission.missionId)
+    #         if missionId_key in mission_intervals:
+    #             interval_var = mission_intervals[missionId_key]
+    #             start_hours = solver.Value(interval_var.StartExpr())
+    #             end_hours = solver.Value(interval_var.EndExpr())
+    #             start_datetime = hours_to_datetime(start_hours)
+    #             end_datetime = hours_to_datetime(end_hours)
+    #             assigned_soldiers = []
+    #             for soldier in soldiers:
+    #                 soldierId_key = str(soldier.personalNumber)
+    #                 if solver.BooleanValue(soldier_mission_vars[(soldierId_key, missionId_key)]):
+    #                     # Storing soldier's full name directly
+    #                     assigned_soldiers.append(soldier.fullName)
+    #             # Append tuple with mission ID, start datetime, and list of assigned soldiers
+    #             missions_details.append(
+    #                 (missionId_key, start_datetime, end_datetime, assigned_soldiers))
+    #         else:
+    #             print(f"Mission ID {missionId_key} not found in mission_intervals")
 
-        #     # Sort missions by start dateti  q  me
-        #     missions_details.sort(key=lambda x: x[1])
+    #     # Sort missions by start dateti  q  me
+    #     missions_details.sort(key=lambda x: x[1])
 
     #     # Print sorted missions
     #     for mission_detail in missions_details:
