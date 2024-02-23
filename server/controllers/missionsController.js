@@ -1,6 +1,6 @@
 /* eslint-disable linebreak-style */
 const mongoose = require('mongoose');
-
+const moment = require('moment');
 const {
   findMissions,
   retrieveMission,
@@ -54,42 +54,27 @@ exports.missionsController = {
   async addMission(req, res, next) {
     try {
       if (Object.keys(req.body).length === 0) throw new BadRequestError('create');
-      if (!Array.isArray(req.body)) {
+      if (Array.isArray(req.body)) {
+        for (const mission of req.body) {
+          const {
+            missionType, startDate, endDate, soldierCount,
+          } = mission;
+          if (!missionType || !startDate || !endDate || !soldierCount) throw new PropertyNotFoundError('mission - missing arguments');
+        }
+      } else {
         const {
           missionType, startDate, endDate, soldierCount,
         } = req.body;
         if (!missionType || !startDate || !endDate || !soldierCount) throw new PropertyNotFoundError('mission - missing arguments');
-        const result = {
-          status: 201,
-          message: '',
-          data: await createMission(req.body),
-        };
-        return result.data;
-        // res.status(result.status);
-        // res.json(result.message || result.data);
-        // options.args = [result.data];
       }
-      for (const mission of req.body) {
-        const {
-          missionType, startDate, endDate, soldierCount,
-        } = mission;
-        if (!missionType || !startDate || !endDate || !soldierCount) throw new PropertyNotFoundError('mission - missing arguments');
-      }
+
       const result = {
         status: 201,
         message: '',
         data: await createMission(req.body),
       };
+
       return result.data;
-
-      // options.args = [result.data];
-      // res.status(result.status);
-      // res.json(result.message || result.data);
-
-      // PythonShell.run('cpAlgorithm.py', options, (err, results) => {
-      //   if (err) console.log(err);
-      //   if (results) console.log(results);
-      // });
     } catch (error) {
       if (error.name === 'ValidationError') {
         error.status = 400;
@@ -128,6 +113,27 @@ exports.missionsController = {
       if (!result.data || result.data.length === 0) throw new EntityNotFoundError(`Request with id <${missionId}>`);
       res.status(result.status);
       res.json(result.message || result.data);
+    } catch (error) {
+      if (error.name === 'ValidationError') {
+        error.status = 400;
+      }
+      next(error);
+    }
+  },
+  async addMissionToAlg(req, res, next) {
+    try {
+      if (Object.keys(req.body).length === 0) throw new BadRequestError('create');
+      const {
+        missionType, startDate, endDate, soldierCount,
+      } = req.body;
+      if (
+        !missionType
+                || !startDate
+                || !endDate
+                || !soldierCount
+      ) throw new PropertyNotFoundError('create - missing arguments');
+      return createMission(req.body); // Return the promise directly
+      // res.status(200).json(soldier);
     } catch (error) {
       if (error.name === 'ValidationError') {
         error.status = 400;

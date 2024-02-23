@@ -2,13 +2,17 @@ const MongoStorage = require('../data/mongoStorage');
 
 if (process.env.DB_HOST && process.env.DB_USER && process.env.DB_PASS) {
   this.storage = new MongoStorage('mission');
+}else{
+  console.log('No DB connection');
 }
 
 const findMissions = () => this.storage.find();
 
 const retrieveMission = (id) => this.storage.retrieve({ _id: id });
 
-const createMission = (mission) => this.storage.create(mission);
+const createMission = (mission) => {
+  this.storage.create(mission);
+};
 
 const updateMission = (id, mission) => this.storage.update({ _id: id }, mission);
 

@@ -1,10 +1,14 @@
-nodemodules
+node_modules
 package-lock.json
 ./algorithm./idea
 .env
 ./idea
-./nodemodules
+./node_modules
 ./pytest_cache
 ./vscode
 ./algorithm/.idea
-./algorithm/__pycache
+./algorithm/__pycache__
+./algorithm/classes/__pycache__
+.idea
+./node_modules
+./algorithm/.idea
