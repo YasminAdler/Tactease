@@ -1,37 +1,5 @@
 /* eslint-disable linebreak-style */
 const mongoose = require('mongoose');
-const { PythonShell } = require('python-shell');
-
-const options = {
-  scriptPath: 'algorithm',
-  mode: 'JSON',
-  args: [],
-};
-// const { spawn } = require('child_process');
-// const executeAlgorithm = async (script,args) => {
-//   // const arguments = args.ToString();
-
-//   const py = spawn('python', [script, args]);
-
-//   const result = new Promise((resolve, reject) => {
-//     let output;
-//     py.stdout.on('data', (data) => {
-//       output = JSON.parse(data);
-//     });
-
-//     py.stderr.on('data', (data) => {
-//       console.error(`Python algorithm error: ${data}`);
-//       reject(`Error occurred in ${script}`);
-//     });
-
-//     py.on('exit', (code) => {
-//       console.log(`Python algorithm exited with code ${code}`);
-//       resolve(output);
-//     });
-//   });
-
-//   return result;
-// }
 
 const {
   findMissions,
@@ -41,6 +9,15 @@ const {
   deleteMission,
 } = require('../repositories/missionsRepository');
 const { EntityNotFoundError, PropertyNotFoundError, BadRequestError } = require('../errors/errors');
+
+const validateMission = (mission) => {
+  const {
+    missionType, startDate, endDate, soldierCount,
+  } = mission;
+  if (!missionType || !startDate || !endDate || !soldierCount) {
+    throw new PropertyNotFoundError('validate mission - missing arguments');
+  }
+};
 
 exports.missionsController = {
   async getMissions(req, res, next) {
@@ -77,22 +54,42 @@ exports.missionsController = {
   async addMission(req, res, next) {
     try {
       if (Object.keys(req.body).length === 0) throw new BadRequestError('create');
-      const {
-        missionType, startDate, endDate, soldierCount,
-      } = req.body;
-      if (!missionType || !startDate || !endDate || !soldierCount) throw new PropertyNotFoundError('mission - missing arguments');
+      if (!Array.isArray(req.body)) {
+        const {
+          missionType, startDate, endDate, soldierCount,
+        } = req.body;
+        if (!missionType || !startDate || !endDate || !soldierCount) throw new PropertyNotFoundError('mission - missing arguments');
+        const result = {
+          status: 201,
+          message: '',
+          data: await createMission(req.body),
+        };
+        return result.data;
+        // res.status(result.status);
+        // res.json(result.message || result.data);
+        // options.args = [result.data];
+      }
+      for (const mission of req.body) {
+        const {
+          missionType, startDate, endDate, soldierCount,
+        } = mission;
+        if (!missionType || !startDate || !endDate || !soldierCount) throw new PropertyNotFoundError('mission - missing arguments');
+      }
       const result = {
         status: 201,
         message: '',
         data: await createMission(req.body),
       };
-      res.status(result.status);
-      res.json(result.message || result.data);
-      options.args = [result.data];
-      PythonShell.run('cpAlgorithm.py', options, (err, results) => {
-        if (err) console.log(err);
-        if (results) console.log(results);
-      });
+      return result.data;
+
+      // options.args = [result.data];
+      // res.status(result.status);
+      // res.json(result.message || result.data);
+
+      // PythonShell.run('cpAlgorithm.py', options, (err, results) => {
+      //   if (err) console.log(err);
+      //   if (results) console.log(results);
+      // });
     } catch (error) {
       if (error.name === 'ValidationError') {
         error.status = 400;

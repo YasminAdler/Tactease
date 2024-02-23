@@ -27,9 +27,15 @@ module.exports = class mongoStorage extends EventEmitter {
     return this.Model.find(id);
   }
 
+  retrieveByClass(id) {
+    return this.Model.find(id);
+  }
+
   create(data) {
-    const newEntity = new this.Model(data);
-    return newEntity.save();
+    if (Array.isArray(data)) {
+      return this.Model.insertMany(data);
+    }
+    return this.Model.create(data);
   }
 
   delete(id) {
