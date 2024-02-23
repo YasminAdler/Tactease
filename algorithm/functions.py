@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from classes.mission import Mission
 from classes.soldier import Soldier
+import json
 
 # def getMissions(missions_data):
 #     missions = []
@@ -22,11 +23,12 @@ from classes.soldier import Soldier
 #     return missions
 
 def getMissions(missions_data):
+    # mission_data_json = json.loads(missions_data)
     missions = []
     try:
         for mission_data in missions_data:
             with open('algorithm/mission_data.txt', 'w') as f:
-                f.write(mission_data)
+                f.write(str(mission_data))
                 f.write('"missions_data:", missions_data\n"missions_data type:", type(missions_data)\n\n\n')
             parsedDateStart = datetime.fromisoformat(mission_data["startDate"].replace('Z', '+00:00'))  # Convert to datetime object
             parsedDateEnd = datetime.fromisoformat(mission_data["endDate"].replace('Z', '+00:00'))  # Convert to datetime object
@@ -40,13 +42,14 @@ def getMissions(missions_data):
             )
             missions.append(mission)
     except Exception as e:
-        print("Error occurred:", e)
+        print("Error occurred in getMissions:", e)
     return missions
 
 
 def getSoldiers(soldiers_data):
+    soldier_data_json = json.loads(soldiers_data)
     soldiers = []
-    for soldier_data in soldiers_data:
+    for soldier_data in soldier_data_json:
         soldier = Soldier(
             personalNumber=int(soldier_data["personalNumber"]),
             fullName=str(soldier_data["fullName"]),

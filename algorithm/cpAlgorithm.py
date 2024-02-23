@@ -6,12 +6,13 @@ import json
 from datetime import datetime, timedelta
 # from classes.soldier import Soldier
 from collections import defaultdict
-from functions import getMissions, getSoldiers, datetime_to_hours, hours_to_datetime
-# sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append('./algorithm/classes')
+# Get the directory of this script
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(current_dir)
+from functions import *
+
 
 # import ast
-
 # print(sys.path)
     # from subprocess import Popen, PIPE
 
@@ -23,14 +24,16 @@ MIN_REST_HOURS = 6  # Minimal resting time in hours
 # dataRecived = ast.iteral_eval(sys.argv[1])
 # arg2 = ast.iteral_eval(sys.argv[2])
 def scheduleAlg(missionsInput, soldiersInput):
-    missions = getMissions(json.loads(missionsInput))
-    soldiers = getSoldiers(json.loads(soldiersInput))
+    # missionsList = [missionsInput]
+    soldiersList = str(soldiersInput)
+    missions = getMissions(missionsInput)
+    soldiers = getSoldiers(soldiersList)
 
     # print(missions)
     # print(soldiers)
-    with open('algorithm/mission_data.txt', 'w') as f:
-        f.write(missions)
-        f.write(soldiers)
+    # with open('algorithm/mission_data.txt', 'w') as f:
+    #     f.write(missions)
+    #     f.write(soldiers)
         
     model = cp_model.CpModel()
 
@@ -254,10 +257,16 @@ def scheduleAlg(missionsInput, soldiersInput):
     else:
         dataTosend = {"error": "No solution was found:\n" + solver.ResponseStats()}
     
-    responseData = json.dumps(dataTosend)
         
-    # print(dataTosend)
-    return responseData
+    print(dataTosend)
+    # return responseData
+    
+    # missionsRouter = requests.post('http://localhost:3000/missions', json=dataTosend)
+    # responseData = missionsRouter.json()
+    
+    responseData = json.dumps(dataTosend)
+    print(responseData)
+    
 
     # dataRecived['dataFromPython'] = dataTosend
     # sys.stdout.write(json.dumps(dataRecived))

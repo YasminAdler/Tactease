@@ -12,11 +12,13 @@ exports.algorithmController = {
       const soldiersRes = await soldiersController.getSoldiersByClassId(req, res, next, 40);
       if (!soldiersRes || soldiersRes.length === 0) throw new EntityNotFoundError('algorithm: soldiersRes is empty');
 
+
+
       const missionsJSON = JSON.stringify(missionRes);
       const soldiersJSON = JSON.stringify(soldiersRes);
 
-      console.log('missionsJSON:', missionsJSON);
-      console.log('soldiersJSON:', soldiersJSON);
+      // console.log('missionsJSON:', missionsJSON);
+      // console.log('soldiersJSON:', soldiersJSON);
 
       // const dataToPass = {
       //   dataSend: [missionsJSON, soldiersJSON],

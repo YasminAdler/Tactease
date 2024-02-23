@@ -1,0 +1,4 @@
+missionType"missions_data:", missions_data
+"missions_data type:", type(missions_data)
+
+

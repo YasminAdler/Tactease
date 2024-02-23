@@ -1,15 +1,13 @@
 const MongoStorage = require('../data/mongoStorage');
 const { DuplicateError } = require('../errors/errors');
 
-if (process.env.DB_HOST && process.env.DB_USER && process.env.DB_PASS) {
-  this.storage = new MongoStorage('soldier');
-}
+const storage = new MongoStorage('soldier');
 
-const findSoldiers = () => this.storage.find({});
+const findSoldiers = () => storage.find({});
 
-const retrieveSoldier = (id) => this.storage.retrieve({ _id: id });
+const retrieveSoldier = (id) => storage.retrieve({ _id: id });
 
-const retrieveSoldierByClass = (id) => this.storage.retrieveByClass({ 'depClass.classId': id });
+const retrieveSoldierByClass = (id) => storage.retrieveByClass({ 'depClass.classId': id });
 
 const createSoldier = async (soldier) => {
   try {
@@ -19,9 +17,9 @@ const createSoldier = async (soldier) => {
   }
 };
 
-const updateSoldier = (id, soldier) => this.storage.update({ _id: id }, soldier);
+const updateSoldier = (id, soldier) => storage.update({ _id: id }, soldier);
 
-const deleteSoldier = (id) => this.storage.delete({ _id: id });
+const deleteSoldier = (id) => storage.delete({ _id: id });
 
 module.exports = {
   // eslint-disable-next-line max-len
