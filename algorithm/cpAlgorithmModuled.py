@@ -1,21 +1,15 @@
-from classes.mission import Mission
 from ortools.sat.python import cp_model
-import sys
 import json
-from datetime import datetime, timedelta
-from classes.soldier import Soldier
 from collections import defaultdict
-from functions import getMissions, getSoldiers, datetime_to_hours, hours_to_datetime
-
-    # from subprocess import Popen, PIPE
-
-    # server = Popen(['node', '../server/middlewares/algorithm.js'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+from functions import getMissions, getSoldiers, datetime_to_hours, getRequest
 
 MIN_REST_HOURS = 6  # Minimal resting time in hours
 
-def generate_mission_schedule(arg1, arg2):
-    missions = getMissions(json.loads(arg1))
-    soldiers = getSoldiers(json.loads(arg2))
+def generate_mission_schedule(missions_arg, soldiers_arg, requstes_arg):
+    
+    missions = getMissions(json.loads(missions_arg))
+    soldiers = getSoldiers(json.loads(soldiers_arg))
+    requstes = getRequest(json.loads(requstes_arg))
     
     model = cp_model.CpModel()
 
@@ -242,7 +236,7 @@ def generate_mission_schedule(arg1, arg2):
     #     print(solver.ResponseStats())
     
     mission_schedule = []
-
+    
     if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
         for mission in missions:
             missionId_key = str(mission.missionId)

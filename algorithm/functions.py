@@ -1,7 +1,34 @@
 from datetime import datetime, timedelta
 from classes.mission import Mission
 from classes.soldier import Soldier
+from classes.request import Request
 
+
+def getMissions(missions_data):
+    missions = []
+    for mission_data in missions_data:
+        mission = Mission(
+            missionId=str(mission_data["missionId"]),
+            missionType=mission_data["missionType"],
+            startDate=mission_data["startDate"],
+            endDate=mission_data["endDate"],
+            soldierCount=int(mission_data["soldierCount"]),
+            soldiersOnMission=mission_data.get("soldiersOnMission", [])
+        )
+        missions.append(mission)
+    return missions
+
+def getRequest(requsts_data):
+    requests = []
+    for request_data in requsts_data:
+        request = Request(
+            requestType=str(request_data["requestType"]),
+            daysOffType=request_data["daysOffType"],
+            start_date=request_data["start_date"],
+            end_date=request_data["end_date"]
+        )
+        requests.append(request)
+    return requests
 
 def getMissions(missions_data):
     missions = []

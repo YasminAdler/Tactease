@@ -27,6 +27,7 @@ exports.missionsController = {
         message: '',
         data: await findMissions(),
       };
+      
       if (result.data.length === 0 || !result.data) throw new EntityNotFoundError('missions');
       res.status(result.status);
       res.json(result.message || result.data);
