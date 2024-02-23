@@ -35,10 +35,6 @@ exports.missionsController = {
   async addMission(req, res, next) {
     try {
       if (Object.keys(req.body).length === 0) throw new BadRequestError('create');
-      const {
-        missionType, startDate, endDate, soldierCount,
-      } = req.body;
-      if (!missionType || !startDate || !endDate || !soldierCount) throw new BadRequestError('mission - missing arguments');
       const mission = await createMission(req.body);
       res.status(200).json(mission);
     } catch (error) {

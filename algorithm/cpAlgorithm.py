@@ -194,7 +194,7 @@ def scheduleAlg(missionsInput, soldiersInput):
                     if solver.BooleanValue(soldier_mission_vars[(soldierId_key, missionId_key)]):
                         assigned_soldiers.append(soldier.personalNumber)
                 missionJson.append({missionId_key: assigned_soldiers})
-        dataTosend = {"missions":missionJson}
+        dataTosend = missionJson;
     else:
         dataTosend = {"error": "No solution was found:\n" + solver.ResponseStats()}
 

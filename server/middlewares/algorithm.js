@@ -37,9 +37,15 @@ exports.algorithmController = {
 
       const pythonProcess = spawner('python', ['-c', `import algorithm.cpAlgorithm; algorithm.cpAlgorithm.scheduleAlg(${missionsJSON}, ${soldiersJSON})`]);
 
-      pythonProcess.stdout.on('data', (data) => {
-        const retrievedData = data.toString();
-        res.status(200).json(retrievedData);
+      pythonProcess.stdout.on('data', async (data) => {
+        const retrievedData = JSON.parse(data); // Parse the data to JSON object
+        const getKey = Object.keys(retrievedData[0]);
+        const id = getKey[0];
+        console.log(id);
+        const values = retrievedData[0][id];
+        console.log(values);
+        const updated = await updateMission(id, { soldiersOnMission: values });
+        res.status(200).json(updated);
       });
 
       let errorData = ''; // Store error data
