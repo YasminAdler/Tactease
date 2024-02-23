@@ -1,19 +1,17 @@
 const MongoStorage = require('../data/mongoStorage');
 const { DuplicateError } = require('../errors/errors');
 
-if (process.env.DB_HOST && process.env.DB_USER && process.env.DB_PASS) {
-  this.storage = new MongoStorage('soldier');
-}
+const storage = new MongoStorage('soldier');
 
-const findSoldiers = () => this.storage.find({});
+const findSoldiers = () => storage.find({});
 
-const retrieveSoldier = (id) => this.storage.retrieve({ _id: id });
+const retrieveSoldier = (id) => storage.retrieve({ _id: id });
 
-const retrieveSoldierByClass = (id) => this.storage.retrieveByClass({ 'depClass.classId': id });
+const retrieveSoldierByClass = (id) => storage.retrieveByClass({ 'depClass.classId': id });
 
 const createSoldier = async (soldier) => {
   try {
-    return await this.storage.create(soldier);
+    return await storage.create(soldier);
   } catch (error) {
     throw new DuplicateError('Soldier');
   }

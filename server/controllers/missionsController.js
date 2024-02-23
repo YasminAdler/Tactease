@@ -1,6 +1,6 @@
 /* eslint-disable linebreak-style */
 const mongoose = require('mongoose');
-const moment = require('moment');
+
 const {
   findMissions,
   retrieveMission,
@@ -10,26 +10,12 @@ const {
 } = require('../repositories/missionsRepository');
 const { EntityNotFoundError, PropertyNotFoundError, BadRequestError } = require('../errors/errors');
 
-const validateMission = (mission) => {
-  const {
-    missionType, startDate, endDate, soldierCount,
-  } = mission;
-  if (!missionType || !startDate || !endDate || !soldierCount) {
-    throw new PropertyNotFoundError('validate mission - missing arguments');
-  }
-};
-
 exports.missionsController = {
   async getMissions(req, res, next) {
     try {
-      const result = {
-        status: 200,
-        message: '',
-        data: await findMissions(),
-      };
-      if (result.data.length === 0 || !result.data) throw new EntityNotFoundError('missions');
-      res.status(result.status);
-      res.json(result.message || result.data);
+      const missions = await findMissions();
+      if (!missions || missions.length === 0) throw new EntityNotFoundError('missions');
+      res.status(200).json(missions);
     } catch (error) {
       next(error);
     }
@@ -38,15 +24,10 @@ exports.missionsController = {
     try {
       const { missionId } = req.params;
       const isId = mongoose.isValidObjectId(missionId);
-      if (!isId) throw new PropertyNotFoundError('id');
-      const result = {
-        status: 200,
-        message: '',
-        data: await retrieveMission(missionId),
-      };
-      if (result.data.length === 0 || !result.data) throw new EntityNotFoundError(`Request with id <${missionId}>`);
-      res.status(result.status);
-      res.json(result.message || result.data);
+      if (!isId) throw new BadRequestError('id');
+      const mission = await retrieveMission(missionId);
+      if (!mission || mission.length === 0) throw new EntityNotFoundError(`Request with id <${missionId}>`);
+      res.status(200).json(mission);
     } catch (error) {
       next(error);
     }
@@ -54,27 +35,12 @@ exports.missionsController = {
   async addMission(req, res, next) {
     try {
       if (Object.keys(req.body).length === 0) throw new BadRequestError('create');
-      if (Array.isArray(req.body)) {
-        for (const mission of req.body) {
-          const {
-            missionType, startDate, endDate, soldierCount,
-          } = mission;
-          if (!missionType || !startDate || !endDate || !soldierCount) throw new PropertyNotFoundError('mission - missing arguments');
-        }
-      } else {
-        const {
-          missionType, startDate, endDate, soldierCount,
-        } = req.body;
-        if (!missionType || !startDate || !endDate || !soldierCount) throw new PropertyNotFoundError('mission - missing arguments');
-      }
-
-      const result = {
-        status: 201,
-        message: '',
-        data: await createMission(req.body),
-      };
-
-      return result.data;
+      const {
+        missionType, startDate, endDate, soldierCount,
+      } = req.body;
+      if (!missionType || !startDate || !endDate || !soldierCount) throw new BadRequestError('mission - missing arguments');
+      const mission = await createMission(req.body);
+      res.status(200).json(mission);
     } catch (error) {
       if (error.name === 'ValidationError') {
         error.status = 400;
@@ -88,14 +54,9 @@ exports.missionsController = {
       const isId = mongoose.isValidObjectId(missionId);
       if (!isId) throw new BadRequestError('id');
       if (Object.keys(req.body).length === 0) throw new BadRequestError('update');
-      const result = {
-        status: 200,
-        message: '',
-        data: await updateMission(missionId, req.body),
-      };
-      if (!result.data || result.data.length === 0) throw new EntityNotFoundError(`Request with id <${missionId}>`);
-      res.status(result.status);
-      res.json(result.message || result.data);
+      const mission = await updateMission();
+      if (!mission || mission.length === 0) throw new EntityNotFoundError(`Request with id <${missionId}>`);
+      res.status(200).json(mission);
     } catch (error) {
       next(error);
     }
@@ -105,35 +66,9 @@ exports.missionsController = {
       const { missionId } = req.params;
       const isId = mongoose.isValidObjectId(missionId);
       if (!isId) throw new BadRequestError('id');
-      const result = {
-        status: 200,
-        message: '',
-        data: await deleteMission(missionId),
-      };
-      if (!result.data || result.data.length === 0) throw new EntityNotFoundError(`Request with id <${missionId}>`);
-      res.status(result.status);
-      res.json(result.message || result.data);
-    } catch (error) {
-      if (error.name === 'ValidationError') {
-        error.status = 400;
-      }
-      next(error);
-    }
-  },
-  async addMissionToAlg(req, res, next) {
-    try {
-      if (Object.keys(req.body).length === 0) throw new BadRequestError('create');
-      const {
-        missionType, startDate, endDate, soldierCount,
-      } = req.body;
-      if (
-        !missionType
-                || !startDate
-                || !endDate
-                || !soldierCount
-      ) throw new PropertyNotFoundError('create - missing arguments');
-      return createMission(req.body); // Return the promise directly
-      // res.status(200).json(soldier);
+      const mission = await deleteMission();
+      if (!mission || mission.length === 0) throw new EntityNotFoundError(`Request with id <${missionId}>`);
+      res.status(200).json(mission);
     } catch (error) {
       if (error.name === 'ValidationError') {
         error.status = 400;

@@ -38,9 +38,19 @@ class DuplicateError extends Error {
   }
 }
 
+class ServerError extends Error {
+  constructor(action) {
+    super(`Internal Server Error - Couldn't ${action} report`);
+    this.name = 'ServerError';
+    this.status = 500;
+  }
+}
+module.exports = { ServerError };
+
 module.exports = {
   EntityNotFoundError,
   PropertyNotFoundError,
   BadRequestError,
   DuplicateError,
+  ServerError,
 };
