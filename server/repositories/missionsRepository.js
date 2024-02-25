@@ -1,4 +1,5 @@
 const MongoStorage = require('../data/mongoStorage');
+// const localStorage = require('../data/localStorage');
 
 if (process.env.DB_HOST && process.env.DB_USER && process.env.DB_PASS) {
   this.storage = new MongoStorage('mission');
