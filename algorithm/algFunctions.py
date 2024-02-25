@@ -11,6 +11,28 @@ def calculate_duration(start, end):
     end_dt = datetime.strptime(end, fmt)
     return (end_dt - start_dt).total_seconds() / 3600
 
+
+def update_mission_schedule(schedule_json_str, missionID, soldier_to_add, soldier_to_remove):
+    # Load the schedule from JSON
+    missions = json.loads(schedule_json_str)
+    
+    # Find the mission by missionID and replace the soldier
+    for mission in missions:
+        if mission["missionId"] == missionID:
+            try:
+                # Find the index of the soldier to remove
+                index_to_replace = mission["soldiersOnMission"].index(str(soldier_to_remove))
+                # Replace the soldier
+                mission["soldiersOnMission"][index_to_replace] = str(soldier_to_add)
+                print(f"Soldier {soldier_to_remove} replaced by {soldier_to_add} in mission {missionID}")
+            except ValueError:
+                print(f"Soldier {soldier_to_remove} not found in mission {missionID}")
+            break
+    
+    # Return the updated missions as a JSON string (if you need to save it back to a file or further process)
+    return json.dumps(missions, indent=4)
+
+
 def calculate_solder_mission_hours(missions):
     soldier_mission_hours = {}
     for mission in missions:
@@ -76,6 +98,10 @@ if __name__ == "__main__":
     # Assuming the rest of your setup remains the same...
     with open('C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/temp-schedule.json', 'r') as file:
         schedule_json_str = file.read()
+        
+    updated_schedule_json_str = update_mission_schedule(schedule_json_str, 1, '1234567', '5555555')
+    
+    # print(updated_schedule_json_str)
         
     missions = json.loads(schedule_json_str)
     soldier_mission_hours = calculate_solder_mission_hours(missions)
