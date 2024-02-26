@@ -23,6 +23,10 @@ module.exports = class mongoStorage extends EventEmitter {
     return this.Model.find();
   }
 
+  findRequests(soldierId) {
+    return this.Model.find({ soldierId });
+  }
+
   retrieve(id) {
     return this.Model.findOne(id);
   }
