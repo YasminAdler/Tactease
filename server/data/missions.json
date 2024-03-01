@@ -40,3 +40,51 @@
         "soldiersOnMission": []
     }
 ]
+
+[
+    {
+        "soldierId":"65cfa5a32d24db0d430f77c2",
+        "requestType": "VACATION",
+        "daysOffType": "SICK_LEAVE",
+        "startDate": "12/02/2024 14:00",
+        "endDate": "12/02/2024 16:00",
+        "note": "I'm sick",
+        "fileName": "sick_note.jpg",
+    },
+    {
+        "soldierId":"65cfa5a32d24db0d430f77c5",
+        "requestType": "VACATION",
+        "daysOffType": "VACATION",
+        "startDate": "12/02/2024 14:00",
+        "endDate": "12/02/2024 16:00",
+        "note": "I'm sick",
+        "fileName": "sick_note.jpg",
+    },
+    {
+        "soldierId":"65cfa5a32d24db0d430f77c6",
+        "requestType": "VACATION",
+        "daysOffType": "SICK_LEAVE",
+        "startDate": "12/02/2024 14:00",
+        "endDate": "12/02/2024 16:00",
+        "note": "I'm sick",
+        "fileName": "sick_note.jpg",
+    },
+    {
+        "soldierId":"65cfa5a32d24db0d430f77c7",
+        "requestType": "VACATION",
+        "daysOffType": "SICK_LEAVE",
+        "startDate": "12/02/2024 14:00",
+        "endDate": "12/02/2024 16:00",
+        "note": "I'm sick",
+        "fileName": "sick_note.jpg",
+    },
+    {
+        "soldierId":"65cfa5a32d24db0d430f77c8",
+        "requestType": "VACATION",
+        "daysOffType": "SICK_LEAVE",
+        "startDate": "22/02/2024 14:00",
+        "endDate": "22/02/2024 16:00",
+        "note": "I'm sick",
+        "fileName": "sick_note.jpg",
+    }
+]

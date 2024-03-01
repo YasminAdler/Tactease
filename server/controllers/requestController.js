@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const {
   findRequests,
+  findSoldierRequests,
   retrieveRequest,
   createRequest,
   updateRequest,
@@ -12,7 +13,13 @@ const { EntityNotFoundError, PropertyNotFoundError, BadRequestError } = require(
 exports.requestsController = {
   async getAllRequests(req, res, next) {
     try {
-      const requests = await findRequests();
+      const { soldierId } = req.params;
+      let requests = null;
+      // if (soldierId !== 'all') {
+      //   requests = await findSoldierRequests(soldierId);
+      // } else {
+      requests = await findRequests();
+      // }
       if (!requests || requests.length === 0) throw new EntityNotFoundError('requests');
       res.status(200).json(requests);
     } catch (error) {
@@ -21,6 +28,7 @@ exports.requestsController = {
   },
 
   async getRequestById(req, res, next) {
+    // const { soldierId } = req.params.soldierId;
     const { requestId } = req.params;
     try {
       const isId = mongoose.isValidObjectId(requestId);
@@ -35,6 +43,7 @@ exports.requestsController = {
 
   async createRequest(req, res, next) {
     try {
+      // const { soldierId } = req.params.soldierId;
       if (Object.keys(req.body).length === 0) throw new BadRequestError('create');
       const {
         soldierId, requestType, daysOffType, startDate, endDate,
@@ -58,6 +67,7 @@ exports.requestsController = {
 
   async deleteRequest(req, res, next) {
     try {
+      // const { soldierId } = req.params.soldierId;
       const { requestId } = req.params;
       const isId = mongoose.isValidObjectId(requestId);
       if (!isId) throw new BadRequestError('id');
@@ -74,6 +84,7 @@ exports.requestsController = {
 
   async updateRequest(req, res, next) {
     try {
+      // const { soldierId } = req.params.soldierId;
       const { requestId } = req.params;
       const isId = mongoose.isValidObjectId(requestId);
       if (!isId) throw new BadRequestError('id');
