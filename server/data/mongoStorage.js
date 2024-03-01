@@ -1,6 +1,9 @@
 const { EventEmitter } = require('events');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const Path = require('path');
+
+dotenv.config();
 
 module.exports = class mongoStorage extends EventEmitter {
   constructor(entity) {

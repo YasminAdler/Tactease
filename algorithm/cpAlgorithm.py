@@ -140,7 +140,6 @@ def scheduleAlg(missionsInput, soldiersInput):
             total_hours += duration_hours
         total_hours_per_day[date] = total_hours
         avarage_mission_hours_for_soldier[date] = total_hours_per_day[date]/len(soldiers)
- #  print(avarage_mission_hours_for_soldier)
 
     for soldier in soldiers:
         for date, avg_hours in avarage_mission_hours_for_soldier.items():
@@ -161,8 +160,6 @@ def scheduleAlg(missionsInput, soldiersInput):
                 # Add constraint for total hours to be at least the average and not exceed the upper limit
                 model.Add(total_hours_for_date >= avg_hours)
                 model.Add(total_hours_for_date <= upper_limit_hours)
-
-        #####################################
 
         # end of constraint fair durations
 
@@ -200,4 +197,3 @@ def scheduleAlg(missionsInput, soldiersInput):
 
     result = json.dumps(dataTosend)
     print(result)
-    return result

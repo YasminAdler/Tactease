@@ -2,6 +2,7 @@ const spawner = require('child_process').spawn;
 const {
   createMission,
   updateMission,
+  deleteMission,
 } = require('../repositories/missionsRepository');
 
 const {
@@ -27,9 +28,7 @@ exports.algorithmController = {
       } else {
         missionArr = missionRes;
       }
-
-      const classId = 40;
-      const soldierRes = await retrieveSoldierByClass(classId);
+      const soldierRes = await retrieveSoldierByClass(missionRes.classId);
       if (!soldierRes || soldierRes.length === 0) throw new EntityNotFoundError(`class with id <${classId}>`);
 
       const missionsJSON = JSON.stringify(missionArr);
@@ -38,14 +37,23 @@ exports.algorithmController = {
       const pythonProcess = spawner('python', ['-c', `import algorithm.cpAlgorithm; algorithm.cpAlgorithm.scheduleAlg(${missionsJSON}, ${soldiersJSON})`]);
 
       pythonProcess.stdout.on('data', async (data) => {
-        const retrievedData = JSON.parse(data); // Parse the data to JSON object
-        const getKey = Object.keys(retrievedData[0]);
-        const id = getKey[0];
-        console.log(id);
-        const values = retrievedData[0][id];
-        console.log(values);
-        const updated = await updateMission(id, { soldiersOnMission: values });
-        res.status(200).json(updated);
+        try {
+          const retrievedData = JSON.parse(data); // Parse the data to JSON object
+          if (retrievedData.includes('error')) {
+            deleteMission(missionRes._id);
+            throw new EntityNotFoundError('algorithm: not found schedule');
+          }
+
+          if (retrievedData.length === 0) throw new EntityNotFoundError('algorithm: retrievedData is empty');
+
+          const getKey = Object.keys(retrievedData[0]);
+          const id = getKey[0];
+          const values = retrievedData[0][id];
+          const updated = await updateMission(id, { soldiersOnMission: values });
+          res.status(200).json(updated);
+        } catch (error) {
+          next(error);
+        }
       });
 
       let errorData = ''; // Store error data
