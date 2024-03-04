@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger('dev'));
 app.use('/missions', missionsRouter);
-app.use('/soldier', soldierRouter);
+app.use('/soldiers', soldierRouter);
 
 app.use(errorHandler);
 

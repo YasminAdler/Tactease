@@ -10,10 +10,6 @@ soldierRouter.post('/', soldiersController.createSoldier);
 soldierRouter.put('/:soldierId', soldiersController.updateSoldier);
 soldierRouter.delete('/:soldierId', soldiersController.deleteSoldier);
 
-// soldierRouter.use('/requests', (req, res, next) => {
-//   next();
-// }, requestsRouter);
-
 soldierRouter.use('/:soldierId/requests', (req, res, next) => {
   req.soldierId = req.params.soldierId;
   next();
