@@ -21,7 +21,13 @@ const updateSoldier = (id, soldier) => this.storage.update({ _id: id }, soldier)
 
 const deleteSoldier = (id) => this.storage.delete({ _id: id });
 
+const createRequest = (id, request) => storage.createRequest(id, request);
+
+const deleteRequest = (id, request) => storage.deleteRequest(id, request);
+
+const updateRequest = (solderId, requestId, data) => storage.updateRequest(solderId, requestId, data);
+
 module.exports = {
   // eslint-disable-next-line max-len
-  findSoldiers, retrieveSoldier, createSoldier, updateSoldier, deleteSoldier, retrieveSoldierByClass,
+  findSoldiers, retrieveSoldier, createSoldier, updateSoldier, deleteSoldier, retrieveSoldierByClass, createRequest, deleteRequest, updateRequest,
 };

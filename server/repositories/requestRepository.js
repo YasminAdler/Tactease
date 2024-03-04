@@ -8,7 +8,7 @@ const findSoldierRequests = (soldierId) => storage.findRequests(soldierId);
 
 const retrieveRequest = (id) => storage.retrieve({ _id: id });
 
-const createRequest = (request) => storage.create(request);
+const createRequest = (id, request) => storage.updateRequests(id, request);
 
 const updateRequest = (id, request) => storage.update({ _id: id }, request);
 

@@ -49,4 +49,28 @@ module.exports = class mongoStorage extends EventEmitter {
   update(id, data) {
     return this.Model.findOneAndUpdate(id, data, { new: true });
   }
+
+  createRequest(id, data) {
+    return this.Model.findOneAndUpdate(
+      { _id: id },
+      { $push: { requestList: data } },
+      { new: true, useFindAndModify: false },
+    );
+  }
+
+  updateRequest(solderId, requestIndex, data) {
+    return this.Model.findOneAndUpdate(
+      { _id: solderId },
+      { $set: { [`requestList.${requestIndex}`]: data } },
+      { new: true, useFindAndModify: false },
+    );
+  }
+
+  deleteRequest(id, data) {
+    return this.Model.findOneAndUpdate(
+      { _id: id },
+      { $pull: { requestList: data } },
+      { new: true, useFindAndModify: false },
+    );
+  }
 };
