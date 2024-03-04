@@ -1,24 +1,8 @@
-const mongoose = require('mongoose');
-
-// const {
-//   findRequests,
-//   findSoldierRequests,
-//   retrieveRequest,
-//   // createRequest,
-//   updateRequest,
-//   // deleteRequest,
-// } = require('../repositories/requestRepository');
-
 const {
-  // findSoldiers,
   retrieveSoldier,
   createRequest,
   deleteRequest,
   updateRequest,
-  // createSoldier,
-  // updateSoldier,
-  // deleteSoldier,
-  // retrieveSoldierByClass,
 } = require('../repositories/soldierRepository');
 const { EntityNotFoundError, PropertyNotFoundError, BadRequestError } = require('../errors/errors');
 
