@@ -1,19 +1,19 @@
 const MongoStorage = require('../data/mongoStorage');
 
-if (process.env.DB_HOST && process.env.DB_USER && process.env.DB_PASS) {
-    this.storage = new MongoStorage('request');
-}
+const storage = new MongoStorage('request');
 
-const findRequests = () => this.storage.find({});
+const findRequests = () => storage.find();
 
-const retrieveRequest = (id) => this.storage.retrieve({ _id: id });
+const findSoldierRequests = (soldierId) => storage.findRequests(soldierId);
 
-const createRequest = (request) => this.storage.create(request);
+const retrieveRequest = (id) => storage.retrieve({ _id: id });
 
-const updateRequest = (id, request) => this.storage.update({ _id: id }, request);
+const createRequest = (id, request) => storage.updateRequests(id, request);
 
-const deleteRequest = (request) => this.storage.delete(request);
+const updateRequest = (id, request) => storage.update({ _id: id }, request);
+
+const deleteRequest = (request) => storage.delete(request);
 
 module.exports = {
-    findRequests, retrieveRequest, createRequest, updateRequest, deleteRequest,
+  findRequests, findSoldierRequests, retrieveRequest, createRequest, updateRequest, deleteRequest,
 };
