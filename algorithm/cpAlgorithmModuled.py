@@ -55,7 +55,6 @@ def generate_mission_schedule(missions_arg, soldiers_arg):
     #         soldier_mission_vars[(soldierId_key, missionId_key)] = model.NewBoolVar(f'soldier_{soldierId_key}mission{missionId_key}')
 
         
-    model = cp_model.CpModel()
 
     mission_intervals = {}
     # Create an IntervalVar for each mission
@@ -288,5 +287,5 @@ def main():
     mission_schedule_json = generate_mission_schedule(missions_json_str, soldiers_json_str)
     print(mission_schedule_json)
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     main()
