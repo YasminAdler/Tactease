@@ -20,8 +20,6 @@ class Mission:
         self.soldiersOnMission = soldiersOnMission
 
         Mission.missionId_counter += 1  # Increment the ID for the next mission
-    def __str__(self):
-        return f"Mission: {self.missionId}, Start: {self.startDate}, End: {self.endDate}, Soldiers on mission: {self.soldiersOnMission}"
 
     def createMission(self, missionType, start_date, end_date, soldiers):
         # This might be redundant as the init method already creates a mission

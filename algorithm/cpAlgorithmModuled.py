@@ -1,23 +1,29 @@
 from ortools.sat.python import cp_model
 import json
 from collections import defaultdict
-from functions import getMissions, getSoldiers, datetime_to_hours, getRequest
+from functions import getMissions, getSoldiers, datetime_to_hours
 
 MIN_REST_HOURS = 6  # Minimal resting time in hours
 
-def generate_mission_schedule(missions_arg, soldiers_arg, requstes_arg):
+def is_soldier_available_for_mission(soldier, mission_start, mission_end):
+    for request in soldier.requestsList:
+        # Check if the mission's time period overlaps with any of the soldier's requests
+        if not (mission_end <= request.start_date or mission_start >= request.end_date):
+            return False  # Soldier is not available if any request overlaps with the mission
+    return True
+
+def generate_mission_schedule(missions_arg, soldiers_arg):
     
     missions = getMissions(json.loads(missions_arg))
     soldiers = getSoldiers(json.loads(soldiers_arg))
-    requstes = getRequest(json.loads(requstes_arg))
     
     model = cp_model.CpModel()
 
     mission_intervals = {}
     soldier_mission_vars = {}
     mission_durations = {}
-
-    # Creating IntervalVar for each mission and BoolVar for each soldier-mission pair
+    
+    
     for mission in missions:
         start_hours = datetime_to_hours(mission.startDate)
         end_hours = datetime_to_hours(mission.endDate)
@@ -25,12 +31,30 @@ def generate_mission_schedule(missions_arg, soldiers_arg, requstes_arg):
         missionId_key = str(mission.missionId)
         mission_intervals[missionId_key] = model.NewIntervalVar(start_hours, duration_hours, end_hours, f'mission_interval_{missionId_key}')
         mission_durations[missionId_key] = duration_hours
+        
         for soldier in soldiers:
             soldierId_key = str(soldier.personalNumber)
-            soldier_mission_vars[(soldierId_key, missionId_key)] = model.NewBoolVar(f'soldier_{soldierId_key}mission{missionId_key}')
+            # Check if soldier is available for the mission considering their requests
+            if is_soldier_available_for_mission(soldier, mission.startDate, mission.endDate):
+                soldier_mission_vars[(soldierId_key, missionId_key)] = model.NewBoolVar(f'soldier_{soldierId_key}mission{missionId_key}')
+            else:
+                # Soldier is not available, so we explicitly set this variable to False
+                soldier_mission_vars[(soldierId_key, missionId_key)] = model.NewConstant(False)
+
+
+    # # Creating IntervalVar for each mission and BoolVar for each soldier-mission pair
+    # for mission in missions:
+    #     start_hours = datetime_to_hours(mission.startDate)
+    #     end_hours = datetime_to_hours(mission.endDate)
+    #     duration_hours = end_hours - start_hours
+    #     missionId_key = str(mission.missionId)
+    #     mission_intervals[missionId_key] = model.NewIntervalVar(start_hours, duration_hours, end_hours, f'mission_interval_{missionId_key}')
+    #     mission_durations[missionId_key] = duration_hours
+    #     for soldier in soldiers:
+    #         soldierId_key = str(soldier.personalNumber)
+    #         soldier_mission_vars[(soldierId_key, missionId_key)] = model.NewBoolVar(f'soldier_{soldierId_key}mission{missionId_key}')
 
         
-    model = cp_model.CpModel()
 
     mission_intervals = {}
     # Create an IntervalVar for each mission
