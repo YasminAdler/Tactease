@@ -287,5 +287,5 @@ def main():
     mission_schedule_json = generate_mission_schedule(missions_json_str, soldiers_json_str)
     print(mission_schedule_json)
 
-if _name_ == "_main_":
+if __name__ == "_main_":
     main()

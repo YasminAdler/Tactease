@@ -94,7 +94,7 @@ def find_min_hours_soldiers_for_day(soldier_mission_hours, specific_day):
     # Return the top 3 soldiers with the minimum hours, or all if less than 3
     return soldiers_hours[:3]
 
-if _name_ == "_main_":
+if __name__ == "_main_":
     # Assuming the rest of your setup remains the same...
     with open('C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/temp-schedule.json', 'r') as file:
         schedule_json_str = file.read()
