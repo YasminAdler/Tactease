@@ -1,9 +1,10 @@
-from ortools.sat.python import cp_model
 import sys
+import os.path
+ortools_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'ortools')
+from ortools.sat.python import cp_model
 import json
 from datetime import datetime, timedelta
 from collections import defaultdict
-import os.path
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(current_dir)
 from functions import getMissions, getSoldiers, datetime_to_hours, hours_to_datetime
