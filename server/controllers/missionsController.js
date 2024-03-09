@@ -5,6 +5,7 @@ const {
   findMissions,
   retrieveMission,
   createMission,
+  createMissions,
   updateMission,
   deleteMission,
 } = require('../repositories/missionsRepository');
@@ -33,10 +34,19 @@ exports.missionsController = {
     }
   },
   async addMission(req, res, next) {
-    try {
-      if (Object.keys(req.body).length === 0) throw new BadRequestError('create');
-      const mission = await createMission(req.body);
-      res.status(200).json(mission);
+    try {        
+      console.log(req.body);
+      if (Array.isArray(req.body)) {
+        for (let i = 0; i < req.body.length; i += 1) {
+          if (Object.keys(req.body[i]).length === 0) throw new BadRequestError('create');
+        }
+        const missions = await createMissions(req.body);
+        res.status(200).json(missions);
+      } else {
+        if (Object.keys(req.body).length === 0) throw new BadRequestError('create');
+        const mission = await createMission(req.body);
+        res.status(200).json(mission);
+      }
     } catch (error) {
       if (error.name === 'ValidationError') {
         error.status = 400;
