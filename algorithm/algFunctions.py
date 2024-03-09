@@ -4,6 +4,10 @@ import json
 def parse_datetime(date_str):
     return datetime.strptime(date_str, '%d/%m/%Y %H:%M')
 
+# def get_available_soldiers(date):
+
+    
+    
 
 def calculate_duration(start, end):
     fmt = '%d/%m/%Y %H:%M'
@@ -52,7 +56,6 @@ def find_available_soldiers(schedule, newMission):
     new_mission_end = parse_datetime(newMission["endDate"])
     available_soldiers = set()  # Use a set to avoid duplicates
 
-    # Assuming we have a way to iterate all soldiers (you'll need to adjust this part)
     all_soldiers = set(soldier for mission in schedule for soldier in mission["soldiersOnMission"])
 
     for soldier in all_soldiers:
@@ -114,3 +117,4 @@ if __name__ == "_main_":
             print(f"{i}. Soldier {soldier} with {hours} hours on {specific_day}")
     else:
         print(f"No mission data available for {specific_day}")
+        

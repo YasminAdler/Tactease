@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from classes.mission import Mission
 from classes.soldier import Soldier
+from classes.request import Request, PersonalRequest, MedicalRequest
 
 def getMissions(missions_data):
     missions = []
@@ -30,6 +31,51 @@ def getSoldiers(soldiers_data):
         soldiers.append(soldier)
     return soldiers
 
+def getRequests(requests_data):
+    requests = []
+    for request_data in requests_data:
+        # Check if it's a MedicalRequest or PersonalRequest by checking for 'file' and 'fileName'
+        if 'file' in request_data and 'fileName' in request_data:
+            request = MedicalRequest(
+                requestType=request_data["requestType"],
+                daysOffType=request_data["daysOffType"],
+                start_date=request_data["start_date"],
+                end_date=request_data["end_date"],
+                file=request_data["file"],
+                fileName=request_data["fileName"]
+            )
+        elif 'note' in request_data:
+            request = PersonalRequest(
+                requestType=request_data["requestType"],
+                daysOffType=request_data["daysOffType"],
+                start_date=request_data["start_date"],
+                end_date=request_data["end_date"],
+                note=request_data["note"]
+            )
+        else:
+            # Handle generic requests or log an error/warning
+            request = Request(
+                requestType=request_data["requestType"],
+                daysOffType=request_data["daysOffType"],
+                start_date=request_data["start_date"],
+                end_date=request_data["end_date"]
+            )
+        requests.append(request)
+    return requests
+
+def parseRequests(requestList):
+    requests = []
+    for request_data in requestList:
+        request = Request(
+            requestType=request_data["requestType"],
+            daysOffType=request_data["daysOffType"],
+            start_date=request_data["startDate"],
+            end_date=request_data["endDate"],
+            note=request_data.get("note"),
+            fileName=request_data.get("fileName")
+        )
+        requests.append(request)
+    return requests
 
 def datetime_to_hours(datetime_input):
     """Function to convert datetime strings to a consistent unit (e.g., hours)"""
