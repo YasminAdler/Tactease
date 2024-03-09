@@ -1,4 +1,5 @@
 const spawner = require('child_process').spawn;
+const path = require('path');
 const {
   createMission,
   updateMission,
@@ -14,6 +15,14 @@ const { EntityNotFoundError, BadRequestError } = require('../errors/errors');
 exports.algorithmController = {
   async executeAlgorithm(req, res, next) {
     try {
+      const pythonPath = process.env.ORTOOLS_PATH;
+      if (!pythonPath) {
+        console.error('ORTOOLS_PATH is not set in the .env file.');
+        process.exit(1); // Exit the application if ORTOOLS_PATH is not set
+      }
+
+      process.env.PYTHONPATH = path.join(__dirname, pythonPath);
+
       if (Object.keys(req.body).length === 0) throw new BadRequestError('create');
       const {
         missionType, startDate, endDate, soldierCount,

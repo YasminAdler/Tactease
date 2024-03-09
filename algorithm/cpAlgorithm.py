@@ -1,6 +1,5 @@
 import sys
 import os.path
-ortools_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'ortools')
 from ortools.sat.python import cp_model
 import json
 from datetime import datetime, timedelta
