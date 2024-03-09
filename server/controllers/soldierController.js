@@ -1,6 +1,9 @@
 /* eslint-disable linebreak-style */
 const mongoose = require('mongoose');
 
+// password handler
+const bcrypt = require('bcrypt');
+
 const {
   findSoldiers,
   retrieveSoldier,
@@ -8,6 +11,7 @@ const {
   updateSoldier,
   deleteSoldier,
   retrieveSoldierByClass,
+  retrieveSoldierByPN,
 } = require('../repositories/soldierRepository');
 const { EntityNotFoundError, PropertyNotFoundError, BadRequestError } = require('../errors/errors');
 
@@ -94,6 +98,45 @@ exports.soldiersController = {
       const soldier = await updateSoldier(soldierId, req.body);
       if (!soldier || soldier.length === 0) throw new EntityNotFoundError(`soldier with id <${soldierId}>`);
       res.status(200).json(soldier);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async login(req, res, next) {
+    try {
+      if (Object.keys(req.body).length === 0) throw new BadRequestError('login');
+      const { personalNumber, password } = req.body;
+      if (!personalNumber || !password) throw new PropertyNotFoundError('Login - missing arguments');
+      const soldier = await retrieveSoldierByPN(personalNumber);
+      if (!soldier || soldier.length === 0) throw new EntityNotFoundError(`soldier with personal number <${personalNumber}>`);
+      const {
+        fullName, depClass, pakal, requestList,
+      } = soldier;
+      // if (await bcrypt.compare(password, soldier.password)) {
+      if (req.session.authenticated) {
+        res.json(req.session);
+      } else if (password === soldier.password) {
+        req.session.authenticated = true;
+        req.session.user = {
+          personalNumber, fullName, depClass, pakal, requestList,
+        };
+        res.status(200).json(req.session.user);
+      } else {
+        throw new BadRequestError('password');
+      }
+    } catch (error) {
+      if (error.name === 'ValidationError') {
+        error.status = 400;
+      }
+      next(error);
+    }
+  },
+
+  async logout(req, res, next) {
+    try {
+      req.session.destroy(req.session.sessionID);
+      res.status(200).json('logged out');
     } catch (error) {
       next(error);
     }
