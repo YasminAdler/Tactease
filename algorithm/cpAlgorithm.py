@@ -1,11 +1,5 @@
 import sys
 import os.path
-python_path = os.environ.get('PYTHONPATH')
-
-# If PYTHONPATH is set, append it to sys.path
-if python_path:
-    sys.path.append(python_path)
-
 from ortools.sat.python import cp_model
 import json
 from datetime import datetime, timedelta
