@@ -1,40 +1,20 @@
-# from classes.mission import Mission
 from ortools.sat.python import cp_model
-import os.path
 import sys
 import json
 from datetime import datetime, timedelta
-# from classes.soldier import Soldier
 from collections import defaultdict
-# Get the directory of this script
+import os.path
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(current_dir)
-from functions import *
-
-
-# import ast
-# print(sys.path)
-    # from subprocess import Popen, PIPE
-
-    # server = Popen(['node', '../server/middlewares/algorithm.js'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+from functions import getMissions, getSoldiers, datetime_to_hours, hours_to_datetime
 
 
 MIN_REST_HOURS = 6  # Minimal resting time in hours
 
-# dataRecived = ast.iteral_eval(sys.argv[1])
-# arg2 = ast.iteral_eval(sys.argv[2])
 def scheduleAlg(missionsInput, soldiersInput):
-    # missionsList = [missionsInput]
-    soldiersList = str(soldiersInput)
     missions = getMissions(missionsInput)
-    soldiers = getSoldiers(soldiersList)
+    soldiers = getSoldiers(soldiersInput)
 
-    # print(missions)
-    # print(soldiers)
-    # with open('algorithm/mission_data.txt', 'w') as f:
-    #     f.write(missions)
-    #     f.write(soldiers)
-        
     model = cp_model.CpModel()
 
     mission_intervals = {}
@@ -61,20 +41,19 @@ def scheduleAlg(missionsInput, soldiersInput):
                 f'soldier_{soldierId_key}mission{missionId_key}'
         )
 
-        # try: constraint: fair durations:
 
-        # Constraint: Balance mission hours among soldiers as evenly as possible
-        #             Calculate the total mission hours for each soldier
+    # Constraint: Balance mission hours among soldiers as evenly as possible
+   #             Calculate the total mission hours for each soldier
 
-        soldier_total_hours = {str(soldier.personalNumber): model.NewIntVar(0, 24, f"total_hours_{str(soldier.personalNumber)}") for soldier in soldiers}
-        mission_durations = {}
-        for mission in missions:
-            start_hours = datetime_to_hours(mission.startDate)
-            end_hours = datetime_to_hours(mission.endDate)
-            duration_hours = end_hours - start_hours
-            missionId_key = str(mission.missionId)
-            mission_intervals[missionId_key] = model.NewIntervalVar(start_hours, duration_hours, end_hours, f'mission_interval_{missionId_key}')
-            mission_durations[missionId_key] = duration_hours
+    soldier_total_hours = {str(soldier.personalNumber): model.NewIntVar(0, 24, f"total_hours_{str(soldier.personalNumber)}") for soldier in soldiers}
+    mission_durations = {}
+    for mission in missions:
+        start_hours = datetime_to_hours(mission.startDate)
+        end_hours = datetime_to_hours(mission.endDate)
+        duration_hours = end_hours - start_hours
+        missionId_key = str(mission.missionId)
+        mission_intervals[missionId_key] = model.NewIntervalVar(start_hours, duration_hours, end_hours, f'mission_interval_{missionId_key}')
+        mission_durations[missionId_key] = duration_hours
 
     # Calculate the total mission hours for each soldier
     soldier_total_hours = {str(soldier.personalNumber): model.NewIntVar(0, 24, f"total_hours_{str(soldier.personalNumber)}") for soldier in soldiers}
@@ -161,7 +140,6 @@ def scheduleAlg(missionsInput, soldiersInput):
             total_hours += duration_hours
         total_hours_per_day[date] = total_hours
         avarage_mission_hours_for_soldier[date] = total_hours_per_day[date]/len(soldiers)
-    print(avarage_mission_hours_for_soldier)
 
     for soldier in soldiers:
         for date, avg_hours in avarage_mission_hours_for_soldier.items():
@@ -183,8 +161,6 @@ def scheduleAlg(missionsInput, soldiersInput):
                 model.Add(total_hours_for_date >= avg_hours)
                 model.Add(total_hours_for_date <= upper_limit_hours)
 
-        #####################################
-
         # end of constraint fair durations
 
     for soldier in soldiers:
@@ -202,43 +178,6 @@ def scheduleAlg(missionsInput, soldiersInput):
 
     solver = cp_model.CpSolver()
     status = solver.Solve(model)
-
-        # if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
-        #     print("Solution Found:")
-        #     missions_details = []
-        #     for mission in missions:
-        #         missionId_key = str(mission.missionId)
-        #         if missionId_key in mission_intervals:
-        #             interval_var = mission_intervals[missionId_key]
-        #             start_hours = solver.Value(interval_var.StartExpr())
-        #             end_hours = solver.Value(interval_var.EndExpr())
-        #             start_datetime = hours_to_datetime(start_hours)
-        #             end_datetime = hours_to_datetime(end_hours)
-        #             assigned_soldiers = []
-        #             for soldier in soldiers:
-        #                 soldierId_key = str(soldier.personalNumber)
-        #                 if solver.BooleanValue(soldier_mission_vars[(soldierId_key, missionId_key)]):
-        #                     # Storing soldier's full name directly
-        #                     assigned_soldiers.append(soldier.fullName)
-        #             # Append tuple with mission ID, start datetime, and list of assigned soldiers
-        #             missions_details.append(
-        #                 (missionId_key, start_datetime, end_datetime, assigned_soldiers))
-        #         else:
-        #             print(f"Mission ID {missionId_key} not found in mission_intervals")
-
-        #     # Sort missions by start dateti  q  me
-        #     missions_details.sort(key=lambda x: x[1])
-
-    #     # Print sorted missions
-    #     for mission_detail in missions_details:
-    #         missionId_key, start_datetime, end_datetime, assigned_soldiers = mission_detail
-    #         print(
-    #             f"Mission {missionId_key} starts at {start_datetime} and ends at {end_datetime}. Assigned Soldiers: {assigned_soldiers}")
-    # else:
-    #     print("No solution was found.")
-    #     print("Solver status:", status)
-    #     print("Solver statistics:")
-    #     print(solver.ResponseStats())
     
     dataTosend = {}
     if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
@@ -252,22 +191,9 @@ def scheduleAlg(missionsInput, soldiersInput):
                     if solver.BooleanValue(soldier_mission_vars[(soldierId_key, missionId_key)]):
                         assigned_soldiers.append(soldier.personalNumber)
                 missionJson.append({missionId_key: assigned_soldiers})
-        # mission_json_str = json.dumps(missionJson)
-        dataTosend = {"missions":missionJson}
+        dataTosend = missionJson;
     else:
         dataTosend = {"error": "No solution was found:\n" + solver.ResponseStats()}
-    
-        
-    print(dataTosend)
-    # return responseData
-    
-    # missionsRouter = requests.post('http://localhost:3000/missions', json=dataTosend)
-    # responseData = missionsRouter.json()
-    
-    responseData = json.dumps(dataTosend)
-    print(responseData)
-    
 
-    # dataRecived['dataFromPython'] = dataTosend
-    # sys.stdout.write(json.dumps(dataRecived))
-    # sys.stdout.flush()
+    result = json.dumps(dataTosend)
+    print(result)

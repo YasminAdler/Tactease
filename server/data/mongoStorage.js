@@ -1,6 +1,9 @@
 const { EventEmitter } = require('events');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const Path = require('path');
+
+dotenv.config();
 
 module.exports = class mongoStorage extends EventEmitter {
   constructor(entity) {
@@ -23,8 +26,12 @@ module.exports = class mongoStorage extends EventEmitter {
     return this.Model.find();
   }
 
+  findRequests(soldierId) {
+    return this.Model.find({ soldierId });
+  }
+
   retrieve(id) {
-    return this.Model.find(id);
+    return this.Model.findOne(id);
   }
 
   retrieveByClass(id) {
@@ -32,9 +39,6 @@ module.exports = class mongoStorage extends EventEmitter {
   }
 
   create(data) {
-    if (Array.isArray(data)) {
-      return this.Model.insertMany(data);
-    }
     return this.Model.create(data);
   }
 
@@ -44,5 +48,29 @@ module.exports = class mongoStorage extends EventEmitter {
 
   update(id, data) {
     return this.Model.findOneAndUpdate(id, data, { new: true });
+  }
+
+  createRequest(id, data) {
+    return this.Model.findOneAndUpdate(
+      { _id: id },
+      { $push: { requestList: data } },
+      { new: true, useFindAndModify: false },
+    );
+  }
+
+  updateRequest(solderId, requestIndex, data) {
+    return this.Model.findOneAndUpdate(
+      { _id: solderId },
+      { $set: { [`requestList.${requestIndex}`]: data } },
+      { new: true, useFindAndModify: false },
+    );
+  }
+
+  deleteRequest(id, data) {
+    return this.Model.findOneAndUpdate(
+      { _id: id },
+      { $pull: { requestList: data } },
+      { new: true, useFindAndModify: false },
+    );
   }
 };

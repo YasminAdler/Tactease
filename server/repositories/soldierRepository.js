@@ -11,7 +11,7 @@ const retrieveSoldierByClass = (id) => storage.retrieveByClass({ 'depClass.class
 
 const createSoldier = async (soldier) => {
   try {
-    return await this.storage.create(soldier);
+    return await storage.create(soldier);
   } catch (error) {
     throw new DuplicateError('Soldier');
   }
@@ -21,7 +21,13 @@ const updateSoldier = (id, soldier) => storage.update({ _id: id }, soldier);
 
 const deleteSoldier = (id) => storage.delete({ _id: id });
 
+const createRequest = (id, request) => storage.createRequest(id, request);
+
+const deleteRequest = (id, request) => storage.deleteRequest(id, request);
+
+const updateRequest = (solderId, requestId, data) => storage.updateRequest(solderId, requestId, data);
+
 module.exports = {
   // eslint-disable-next-line max-len
-  findSoldiers, retrieveSoldier, createSoldier, updateSoldier, deleteSoldier, retrieveSoldierByClass,
+  findSoldiers, retrieveSoldier, createSoldier, updateSoldier, deleteSoldier, retrieveSoldierByClass, createRequest, deleteRequest, updateRequest,
 };

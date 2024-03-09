@@ -1,38 +1,58 @@
 const spawner = require('child_process').spawn;
-const { soldiersController } = require('../controllers/soldierController');
-const { missionsController } = require('../controllers/missionsController');
-const { EntityNotFoundError } = require('../errors/errors');
+const {
+  createMission,
+  updateMission,
+  deleteMission,
+} = require('../repositories/missionsRepository');
+
+const {
+  retrieveSoldierByClass,
+} = require('../repositories/soldierRepository');
+
+const { EntityNotFoundError, BadRequestError } = require('../errors/errors');
 
 exports.algorithmController = {
   async executeAlgorithm(req, res, next) {
     try {
-      const missionRes = await missionsController.addMission(req, res, next);
+      if (Object.keys(req.body).length === 0) throw new BadRequestError('create');
+      const {
+        missionType, startDate, endDate, soldierCount,
+      } = req.body;
+      if (!missionType || !startDate || !endDate || !soldierCount) throw new BadRequestError('mission - missing arguments');
+      const missionRes = await createMission(req.body);
       if (!missionRes || missionRes.length === 0) throw new EntityNotFoundError('algorithm: missionRes is empty');
 
-      const soldiersRes = await soldiersController.getSoldiersByClassId(req, res, next, 40);
-      if (!soldiersRes || soldiersRes.length === 0) throw new EntityNotFoundError('algorithm: soldiersRes is empty');
+      let missionArr = [];
+      if (!Array.isArray(missionRes)) {
+        missionArr = [missionRes];
+      } else {
+        missionArr = missionRes;
+      }
+      const soldierRes = await retrieveSoldierByClass(missionRes.classId);
+      if (!soldierRes || soldierRes.length === 0) throw new EntityNotFoundError(`class with id <${classId}>`);
 
-
-
-      const missionsJSON = JSON.stringify(missionRes);
-      const soldiersJSON = JSON.stringify(soldiersRes);
-
-      // console.log('missionsJSON:', missionsJSON);
-      // console.log('soldiersJSON:', soldiersJSON);
-
-      // const dataToPass = {
-      //   dataSend: [missionsJSON, soldiersJSON],
-      //   dataRecieve: {},
-      // };
-
-      // let retrievedData = '';
+      const missionsJSON = JSON.stringify(missionArr);
+      const soldiersJSON = JSON.stringify(soldierRes);
 
       const pythonProcess = spawner('python', ['-c', `import algorithm.cpAlgorithm; algorithm.cpAlgorithm.scheduleAlg(${missionsJSON}, ${soldiersJSON})`]);
 
-      pythonProcess.stdout.on('data', (data) => {
-        const retrievedData = JSON.parse(data.toString());
-        if (!res.headersSent) { // Check if headers have already been sent
-          res.status(200).json(retrievedData);
+      pythonProcess.stdout.on('data', async (data) => {
+        try {
+          const retrievedData = JSON.parse(data); // Parse the data to JSON object
+          if (retrievedData.includes('error')) {
+            deleteMission(missionRes._id);
+            throw new EntityNotFoundError('algorithm: not found schedule');
+          }
+
+          if (retrievedData.length === 0) throw new EntityNotFoundError('algorithm: retrievedData is empty');
+
+          const getKey = Object.keys(retrievedData[0]);
+          const id = getKey[0];
+          const values = retrievedData[0][id];
+          const updated = await updateMission(id, { soldiersOnMission: values });
+          res.status(200).json(updated);
+        } catch (error) {
+          next(error);
         }
       });
 
@@ -49,52 +69,8 @@ exports.algorithmController = {
           res.status(400).json({ error: errorData }); // Send error response
         }
       });
-
-      // pythonProcess.stdout.on('data', (data) => {
-      //   const retrievedData = JSON.parse(data.toString());
-      //   if (!res.headersSent) { // Check if headers have already been sent
-      //     res.status(200).json(retrievedData);
-      //     // console.log(retrievedData);
-      //   }
-      //   // res.status(200).json(retreivedData);
-      // });
-
-      // pythonProcess.stderr.on('data', (data) => {
-      //   console.error(`stderr: ${data}`);
-      //   res.status(400).json(data);
-      // });
     } catch (error) {
       next(error);
     }
   },
 };
-
-// const options = {
-//   scriptPath: 'algorithm',
-//   mode: 'JSON',
-//   args: [],
-// };
-
-// exports.algorithmController = {
-//   async executeAlgorithm(req, res, next) {
-//     try {
-//       const missionRes = await missionsController.addMission(req, res, next);
-//       if (!missionRes || missionRes.length === 0) throw new BadRequestError('algorithm: missionRes is empty');
-//       //const { classId } = missionRes.data.depClass;
-//       const soldiersRes = await soldiersController.getSoldiersByClassId(req, res, next, 40);
-//       if (!missionRes || missionRes.length === 0) throw new BadRequestError('algorithm: soldiersRes is empty');
-//       options.args = [JSON.stringify(missionRes), JSON.stringify(soldiersRes)];
-//       PythonShell.run('cpAlgorithm.py', options, (err, algRes) => {
-//         if (err) throw err;
-//         if (!algRes || algRes.length === 0) throw new BadRequestError('algorithm: algRes is empty');
-//         const missionJson = JSON.parse(algRes[0]);
-
-//         console.log('algRes:', missionJson);
-//         res.status(200).json(missionJson);
-//       });
-
-//     } catch (error) {
-//       next(error);
-//     }
-//   },
-// };

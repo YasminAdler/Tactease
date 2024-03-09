@@ -1,4 +1,1 @@
-missionType"missions_data:", missions_data
-"missions_data type:", type(missions_data)
-
-
+{"missions": [{"65d8a0c935f1de7992d0277c": [6589711, 5555555, 1232323, 1111111]}]}
