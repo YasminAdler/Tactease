@@ -35,7 +35,7 @@ exports.algorithmController = {
       const missionsJSON = JSON.stringify(missionArr);
       const soldiersJSON = JSON.stringify(soldierRes);
 
-      const pythonProcess = spawner('python', ['-c', `import algorithm.cpAlgorithm; algorithm.cpAlgorithm.scheduleAlg(${missionsJSON}, ${soldiersJSON})`]);
+      const pythonProcess = spawner('python', ['-m', `import algorithm.cpAlgorithm; algorithm.cpAlgorithm.scheduleAlg(${missionsJSON}, ${soldiersJSON})`]);
 
       pythonProcess.stdout.on('data', async (data) => {
         try {
