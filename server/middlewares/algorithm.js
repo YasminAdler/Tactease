@@ -34,11 +34,9 @@ exports.algorithmController = {
 
       const missionsJSON = JSON.stringify(missionArr);
       const soldiersJSON = JSON.stringify(soldierRes);
+      
+      const pythonProcess = spawner('python', ['-c', `import algorithm.cpAlgorithm; algorithm.cpAlgorithm.scheduleAlg(${missionsJSON}, ${soldiersJSON})`]);
 
-      const pythonScriptPath = path.join(__dirname, '..', 'algorithm', 'cpAlgorithm.py');
-
-      // Command to activate the virtual environment (if needed) and execute the Python script
-      const pythonProcess = spawner('sh', ['-c', `. /opt/render/.local/lib/python3.7/site-packages && python ${pythonScriptPath}`, missionsJSON, soldiersJSON]);
 
       pythonProcess.stdout.on('data', async (data) => {
         try {
