@@ -67,19 +67,6 @@ def generate_mission_schedule(missions_arg, soldiers_arg):
                 soldier_mission_vars[(soldierId_key, missionId_key)] = model.NewConstant(False)
     
 
-    # # Creating IntervalVar for each mission and BoolVar for each soldier-mission pair
-    # for mission in missions:
-    #     start_hours = datetime_to_hours(mission.startDate)
-    #     end_hours = datetime_to_hours(mission.endDate)
-    #     duration_hours = end_hours - start_hours
-    #     missionId_key = str(mission.missionId)
-    #     mission_intervals[missionId_key] = model.NewIntervalVar(start_hours, duration_hours, end_hours, f'mission_interval_{missionId_key}')
-    #     mission_durations[missionId_key] = duration_hours
-    #     for soldier in soldiers:
-    #         soldierId_key = str(soldier.personalNumber)
-    #         soldier_mission_vars[(soldierId_key, missionId_key)] = model.NewBoolVar(f'soldier_{soldierId_key}mission{missionId_key}')
-
-
 
     mission_intervals = {}
     # Create an IntervalVar for each mission
@@ -260,42 +247,6 @@ def generate_mission_schedule(missions_arg, soldiers_arg):
     solver = cp_model.CpSolver()    
     status = solver.Solve(model)
 
-    # if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
-    #     print("Solution Found:")
-    #     missions_details = []
-    #     for mission in missions:
-    #         missionId_key = str(mission.missionId)
-    #         if missionId_key in mission_intervals:
-    #             interval_var = mission_intervals[missionId_key]
-    #             start_hours = solver.Value(interval_var.StartExpr())
-    #             end_hours = solver.Value(interval_var.EndExpr())
-    #             start_datetime = hours_to_datetime(start_hours)
-    #             end_datetime = hours_to_datetime(end_hours)
-    #             assigned_soldiers = []
-    #             for soldier in soldiers:
-    #                 soldierId_key = str(soldier.personalNumber)
-    #                 if solver.BooleanValue(soldier_mission_vars[(soldierId_key, missionId_key)]):
-    #                     # Storing soldier's full name directly
-    #                     assigned_soldiers.append(soldier.fullName)
-    #             # Append tuple with mission ID, start datetime, and list of assigned soldiers
-    #             missions_details.append(
-    #                 (missionId_key, start_datetime, end_datetime, assigned_soldiers))
-    #         else:
-    #             print(f"Mission ID {missionId_key} not found in mission_intervals")
-
-    #     # Sort missions by start dateti  q  me
-    #     missions_details.sort(key=lambda x: x[1])
-
-    #     # Print sorted missions
-    #     for mission_detail in missions_details:
-    #         missionId_key, start_datetime, end_datetime, assigned_soldiers = mission_detail
-    #         print(
-    #             f"Mission {missionId_key} starts at {start_datetime} and ends at {end_datetime}. Assigned Soldiers: {assigned_soldiers}")
-    # else:
-    #     print("No solution was found.")
-    #     print("Solver status:", status)
-    #     print("Solver statistics:")
-    #     print(solver.ResponseStats())
     
     mission_schedule = []
     
@@ -354,52 +305,50 @@ def find_unassigned_soldiers(schedule_json_str, new_mission):
 def add_new_mission_with_soldiers(schedule_json_str, new_mission_details):
     missions = json.loads(schedule_json_str)
 
+    # Attempt to find available soldiers for the new mission
     available_soldiers = find_available_soldiers(missions, new_mission_details)
-    
+
+    # If no available soldiers were found, try finding unassigned soldiers
+    if not available_soldiers:
+        available_soldiers = find_unassigned_soldiers(missions, new_mission_details['startDate'], new_mission_details['endDate'])
+        print("No available soldiers found. Here are soldiers not assigned to any missions in the provided timeframe:")
+        print(available_soldiers)
+    else:
+        print("Available soldiers for selection:", available_soldiers)
 
     needed_soldiers_count = new_mission_details.get("soldierCount", len(available_soldiers))  # Default to all available if not specified
     selected_soldiers = available_soldiers[:needed_soldiers_count]
 
-    # Print available soldiers for user selection in a real application
-    print("Available soldiers for selection:", available_soldiers)
     print("Selected soldiers for the mission:", selected_soldiers)
 
-    # Step 4: Assign the selected soldiers to the new mission and add it to the schedule
+    # Assign the selected soldiers to the new mission and add it to the schedule
     new_mission_details["soldiersOnMission"] = selected_soldiers
     missions.append(new_mission_details)
 
-    # Return the updated schedule as JSON
     return json.dumps(missions, indent=4)
+
 
 
 def main():
     # Read the missions file content
     with open('C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/temp-missions.json', 'r') as file:
         missions_json_str = file.read()
-
-    # Read the soldiers file content
     with open('C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/temp-soldiers.json', 'r') as file:
         soldiers_json_str = file.read()
-        
+          
     missions = getMissions(json.loads(missions_json_str))
-
-    # Generate the mission schedule JSON
     schedule__json = generate_mission_schedule(missions_json_str, soldiers_json_str)
-    # print(schedule__json)
     
-    # Example new mission details
     print("New mission is added")
     new_mission_details = {
         "_id": len(missions) + 1,  # Assuming missionId is sequential and unique
-        "startDate": "14/02/2024 10:00",
-        "endDate": "14/02/2024 14:00",
-        "soldierCount": 2  # Number of soldiers needed for this mission
+        "startDate": "12/02/2024 10:00",
+        "endDate": "12/02/2024 14:00",
+        "soldierCount": 14  # Number of soldiers needed for this mission
     }
 
     # Simulate the process of adding a new mission and finding/selecting/assigning available soldiers
     updated_schedule_json_str = add_new_mission_with_soldiers(schedule__json, new_mission_details)
-
-    # Print or save the updated schedule as needed
     print(updated_schedule_json_str)
     
 
