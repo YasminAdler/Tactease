@@ -35,7 +35,7 @@ exports.algorithmController = {
       const missionsJSON = JSON.stringify(missionArr);
       const soldiersJSON = JSON.stringify(soldierRes);
 
-      const pythonScriptPath = path.join(__dirname, '..', 'algorithm', 'cpAlgorithm.py');
+      const pythonScriptPath = path.join(__dirname, '..', '..', 'algorithm', 'cpAlgorithm.py');
       const pythonProcess = spawner('python', [pythonScriptPath, missionsJSON, soldiersJSON]);
 
       //      const pythonProcess = spawner('python', ['-c', `import algorithm.cpAlgorithm; algorithm.cpAlgorithm.scheduleAlg(${missionsJSON}, ${soldiersJSON})`]);
