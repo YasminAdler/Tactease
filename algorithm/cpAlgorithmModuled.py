@@ -1,7 +1,7 @@
 from ortools.sat.python import cp_model
 import json
 from collections import defaultdict
-from functions import getMissions, getSoldiers, datetime_to_hours
+from functions import getMissions, getRequests, getSoldiers, datetime_to_hours
 from algFunctions import find_available_soldiers
 
 MIN_REST_HOURS = 6  # Minimal resting time in hours
@@ -40,6 +40,7 @@ def generate_mission_schedule(missions_arg, soldiers_arg):
     
     missions = getMissions(json.loads(missions_arg))
     soldiers = getSoldiers(json.loads(soldiers_arg))
+
     
     model = cp_model.CpModel()
 
@@ -52,7 +53,7 @@ def generate_mission_schedule(missions_arg, soldiers_arg):
         start_hours = datetime_to_hours(mission.startDate)
         end_hours = datetime_to_hours(mission.endDate)
         duration_hours = end_hours - start_hours
-        _id_key = str(mission._id)
+        missionId_key = str(mission._id)
         mission_intervals[missionId_key] = model.NewIntervalVar(start_hours, duration_hours, end_hours, f'mission_interval_{missionId_key}')
         mission_durations[missionId_key] = duration_hours
         
@@ -71,7 +72,7 @@ def generate_mission_schedule(missions_arg, soldiers_arg):
     #     start_hours = datetime_to_hours(mission.startDate)
     #     end_hours = datetime_to_hours(mission.endDate)
     #     duration_hours = end_hours - start_hours
-    #     missionId_key = str(mission._id)
+    #     missionId_key = str(mission.missionId)
     #     mission_intervals[missionId_key] = model.NewIntervalVar(start_hours, duration_hours, end_hours, f'mission_interval_{missionId_key}')
     #     mission_durations[missionId_key] = duration_hours
     #     for soldier in soldiers:
@@ -135,7 +136,7 @@ def generate_mission_schedule(missions_arg, soldiers_arg):
     #         start_hours = datetime_to_hours(mission.startDate)
     #         end_hours = datetime_to_hours(mission.endDate)
     #         duration_hours = end_hours - start_hours
-    #         missionId_key = str(mission._id)
+    #         missionId_key = str(mission.missionId)
     #         mission_intervals[missionId_key] = model.NewIntervalVar(start_hours, duration_hours, end_hours, f'mission_interval_{missionId_key}')
     #         mission_durations[missionId_key] = duration_hours
 
@@ -165,6 +166,8 @@ def generate_mission_schedule(missions_arg, soldiers_arg):
 
     # # Objective: Minimize the difference to balance the workload and the number of missions
     # model.Minimize(max_hours_var - min_hours_var)
+
+
 
         # end of constraint fair durations
 
@@ -261,7 +264,7 @@ def generate_mission_schedule(missions_arg, soldiers_arg):
     #     print("Solution Found:")
     #     missions_details = []
     #     for mission in missions:
-    #         missionId_key = str(mission._id)
+    #         missionId_key = str(mission.missionId)
     #         if missionId_key in mission_intervals:
     #             interval_var = mission_intervals[missionId_key]
     #             start_hours = solver.Value(interval_var.StartExpr())
@@ -321,11 +324,38 @@ def generate_mission_schedule(missions_arg, soldiers_arg):
         return json.dumps({"error": "No solution was found."})
 
 
+def find_unassigned_soldiers(schedule_json_str, new_mission):
+    schedule = json.loads(schedule_json_str)
+    
+    new_mission_start_dt = mission.startDate.strftime("%d/%m/%Y %H:%M")
+    new_mission_end_dt =  mission.endDate.strftime("%d/%m/%Y %H:%M")
+    
+    assigned_soldiers = set()
+    
+    # Iterate through existing missions to check for overlaps
+    for mission in schedule:
+        mission_start = mission.startDate.strftime("%d/%m/%Y %H:%M")
+        mission_end = mission.endDate.strftime("%d/%m/%Y %H:%M")
+        
+        if not (new_mission_end_dt <= mission_start or new_mission_start_dt >= mission_end):
+            assigned_soldiers.update(mission.get('soldiersOnMission', []))
+    
+    # Find all unique soldiers in the schedule
+    all_soldiers = set(soldier for mission in schedule for soldier in mission.get('soldiersOnMission', []))
+    
+    # Determine unassigned soldiers by subtracting assigned soldiers from all soldiers
+    unassigned_soldiers = all_soldiers - assigned_soldiers
+    
+    return list(unassigned_soldiers)
+
+
+
         
 def add_new_mission_with_soldiers(schedule_json_str, new_mission_details):
     missions = json.loads(schedule_json_str)
 
     available_soldiers = find_available_soldiers(missions, new_mission_details)
+    
 
     needed_soldiers_count = new_mission_details.get("soldierCount", len(available_soldiers))  # Default to all available if not specified
     selected_soldiers = available_soldiers[:needed_soldiers_count]

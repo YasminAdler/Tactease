@@ -3,13 +3,29 @@
         "personalNumber": 1234567,
         "fullName": "Ran Lachmi",
         "pakal": "SNIPER",
-        "requestList": [],
+        "requestList": [
+            {
+                "requestType": "MEDICAL_REQUEST",
+                "daysOffType": "SICK_LEAVE",
+                "startDate": "12/02/2024 14:00",
+                "endDate": "12/02/2024 16:00",
+                "note": "I'm sick",
+                "fileName": "sick_note.jpg"
+            },
+            {
+                "requestType": "PERSONAL_REQUEST",
+                "daysOffType": "VACATION",
+                "startDate": "15/02/2024 18:00",
+                "endDate": "15/02/2024 23:00",
+                "note": "my sister's gettin married.",
+                "fileName": "invitation.png"
+            }
+        ],
         "depClass": {
             "classId": 40,
             "className": "Haruvit"
         }
     },
-
     {
         "personalNumber": 8765421,
         "fullName": "Eido Peretz",
