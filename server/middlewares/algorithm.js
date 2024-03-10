@@ -38,7 +38,7 @@ exports.algorithmController = {
       const pythonScriptPath = path.join(__dirname, '..', 'algorithm', 'cpAlgorithm.py');
 
       // Command to activate the virtual environment (if needed) and execute the Python script
-      const pythonProcess = spawner('sh', ['-c', `. /path/to/venv/bin/activate && python ${pythonScriptPath}`, missionsJSON, soldiersJSON]);
+      const pythonProcess = spawn('sh', ['-c', `. /opt/render/.local/lib/python3.7/site-packages && python ${pythonScriptPath}`, missionsJSON, soldiersJSON]);
 
       pythonProcess.stdout.on('data', async (data) => {
         try {
