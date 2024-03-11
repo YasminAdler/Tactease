@@ -278,7 +278,6 @@ def generate_mission_schedule(missions_arg, soldiers_arg):
 
 
 def main():
-    # Read the missions file content
     with open('C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/temp-missions.json', 'r') as file:
         missions_json_str = file.read()
     with open('C:/Users/adler/OneDrive - Shenkar College/SCHOOL/Year3SM1/שיטות בהנדסת תוכנה/Tactease/algorithm/temp-soldiers.json', 'r') as file:
@@ -289,13 +288,12 @@ def main():
     
     print("New mission is added")
     new_mission_details = {
-        "_id": len(missions) + 1,  # Assuming missionId is sequential and unique
+        "_id": len(missions) + 1,
         "startDate": "12/02/2024 10:00",
         "endDate": "12/02/2024 14:00",
-        "soldierCount": 14  # Number of soldiers needed for this mission
+        "soldierCount": 6 
     }
 
-    # Simulate the process of adding a new mission and finding/selecting/assigning available soldiers
     updated_schedule_json_str = add_new_mission_with_soldiers(schedule__json, new_mission_details, soldiers_json_str)
     print(updated_schedule_json_str)
     
