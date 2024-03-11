@@ -1,13 +1,10 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
+
 
 def parse_datetime(date_str):
     return datetime.strptime(date_str, '%d/%m/%Y %H:%M')
 
-# def get_available_soldiers(date):
-
-    
-    
 
 def calculate_duration(start, end):
     fmt = '%d/%m/%Y %H:%M'
@@ -40,10 +37,10 @@ def update_mission_schedule(schedule_json_str, missionID, soldier_to_add, soldie
 def calculate_solder_mission_hours(missions):
     soldier_mission_hours = {}
     for mission in missions:
-        mission_duration = calculate_duration(mission["startDate"], mission["endDate"])
-        mission_day = datetime.strptime(mission["startDate"], '%d/%m/%Y %H:%M').date()
+        mission_duration = calculate_duration(mission.startDate, mission.endDate)
+        mission_day = datetime.strptime(mission.startDate, '%d/%m/%Y %H:%M').date()
         
-        for soldier_number in mission["soldiersOnMission"]:
+        for soldier_number in mission.soldiersOnMission:
             if soldier_number not in soldier_mission_hours:
                 soldier_mission_hours[soldier_number] = {}
             if mission_day not in soldier_mission_hours[soldier_number]:
@@ -51,37 +48,100 @@ def calculate_solder_mission_hours(missions):
             soldier_mission_hours[soldier_number][mission_day] += mission_duration
     return soldier_mission_hours  # Ensure this dictionary is returned
 
-def find_available_soldiers(schedule, newMission):
+def find_available_soldiers(schedule, newMission, soldiers):
+    # Assuming soldiers is already a Python list or dict, so no need to parse it from a string
     new_mission_start = parse_datetime(newMission["startDate"])
     new_mission_end = parse_datetime(newMission["endDate"])
-    available_soldiers = set()  # Use a set to avoid duplicates
+    rest_period = timedelta(hours=4)
+    available_soldiers = set()
 
-    all_soldiers = set(soldier for mission in schedule for soldier in mission["soldiersOnMission"])
+    all_soldiers_info = {soldier["personalNumber"]: soldier for soldier in soldiers}
+    all_soldiers = set(all_soldiers_info.keys())
 
-    for soldier in all_soldiers:
+    for soldier_id in all_soldiers:
+        soldier = all_soldiers_info[soldier_id]
         soldier_is_available = True
+        
+        # Check for mission schedule conflicts
         for mission in schedule:
-            if soldier in mission["soldiersOnMission"]:
+            if soldier_id in mission["soldiersOnMission"]:
                 mission_start = parse_datetime(mission["startDate"])
                 mission_end = parse_datetime(mission["endDate"])
-                # Check if the new mission overlaps with this soldier's current missions
-                if not (new_mission_end <= mission_start or new_mission_start >= mission_end):
+                if not (new_mission_end + rest_period <= mission_start or new_mission_start >= mission_end + rest_period):
                     soldier_is_available = False
-                    break  # No need to check other missions if one conflict is found
+                    break
+        
+        # Check for request conflicts
         if soldier_is_available:
-            available_soldiers.add(soldier)
+            for request in soldier.get("requestList", []):
+                request_start = parse_datetime(request["startDate"])
+                request_end = parse_datetime(request["endDate"])
+                if not (new_mission_end <= request_start or new_mission_start >= request_end):
+                    soldier_is_available = False
+                    break
+        
+        if soldier_is_available:
+            available_soldiers.add(soldier_id)
 
-    return list(available_soldiers)  # Convert the set to a list for the final result
+    return available_soldiers
 
-# Example usage
-schedule = [
-    {"missionId": 1, "startDate": "12/02/2024 6:00", "endDate": "12/02/2024 10:00", "soldiersOnMission": ["5555555", "1232323"]},
-    # Add more missions as needed
-]
-newMission = {"startDate": "12/02/2024 11:00", "endDate": "12/02/2024 14:00"}
 
-available_soldiers = find_available_soldiers(schedule, newMission)
-print("Available soldiers:", available_soldiers)
+def find_unassigned_soldiers(schedule_json_str, new_mission):
+    schedule = json.loads(schedule_json_str)
+    
+    new_mission_start_dt = mission.startDate.strftime("%d/%m/%Y %H:%M")
+    new_mission_end_dt =  mission.endDate.strftime("%d/%m/%Y %H:%M")
+    
+    assigned_soldiers = set()
+    
+    # Iterate through existing missions to check for overlaps
+    for mission in schedule:
+        mission_start = mission.startDate.strftime("%d/%m/%Y %H:%M")
+        mission_end = mission.endDate.strftime("%d/%m/%Y %H:%M")
+        
+        if not (new_mission_end_dt <= mission_start or new_mission_start_dt >= mission_end):
+            assigned_soldiers.update(mission.get('soldiersOnMission', []))
+    
+    # Find all unique soldiers in the schedule
+    all_soldiers = set(soldier for mission in schedule for soldier in mission.get('soldiersOnMission', []))
+    
+    # Determine unassigned soldiers by subtracting assigned soldiers from all soldiers
+    unassigned_soldiers = all_soldiers - assigned_soldiers
+    
+    return list(unassigned_soldiers)
+
+
+def add_new_mission_with_soldiers(schedule_json_str, new_mission_details, soldiers_json):
+    missions = json.loads(schedule_json_str)
+    soldiers = json.loads(soldiers_json)
+    
+    if isinstance(soldiers_json, str):
+        soldiers = json.loads(soldiers_json)
+    else:
+        soldiers = soldiers_json
+
+    # Attempt to find available soldiers for the new mission
+    available_soldiers = find_available_soldiers(missions, new_mission_details, soldiers)
+
+    # Convert available_soldiers from a set to a list for slicing
+    available_soldiers_list = list(available_soldiers)
+
+    needed_soldiers_count = new_mission_details.get("soldierCount")
+
+    # Proceed only if the exact number of needed soldiers is available or more
+    if needed_soldiers_count is not None and len(available_soldiers_list) >= needed_soldiers_count:
+        # Select only the needed amount of soldiers if more are available
+        selected_soldiers = available_soldiers_list[:needed_soldiers_count]
+    else:
+        # Handle the case where not enough soldiers are available
+        print(f"Error: Not enough available soldiers for the mission. Needed: {needed_soldiers_count}, Available: {len(available_soldiers_list)}")
+        return None  # or handle this case as needed
+
+    # Assign the selected soldiers to the new mission and add it to the schedule
+    new_mission_details["soldiersOnMission"] = selected_soldiers
+    missions.append(new_mission_details)
+
+    return json.dumps(missions, indent=4)
 
 
 def find_min_hours_soldiers_for_day(soldier_mission_hours, specific_day):

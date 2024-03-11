@@ -2,7 +2,7 @@ from ortools.sat.python import cp_model
 import json
 from collections import defaultdict
 from functions import getMissions, getRequests, getSoldiers, datetime_to_hours
-from algFunctions import find_available_soldiers
+from algFunctions import find_available_soldiers, add_new_mission_with_soldiers, find_unassigned_soldiers
 
 MIN_REST_HOURS = 6  # Minimal resting time in hours
 
@@ -275,58 +275,6 @@ def generate_mission_schedule(missions_arg, soldiers_arg):
         return json.dumps({"error": "No solution was found."})
 
 
-def find_unassigned_soldiers(schedule_json_str, new_mission):
-    schedule = json.loads(schedule_json_str)
-    
-    new_mission_start_dt = mission.startDate.strftime("%d/%m/%Y %H:%M")
-    new_mission_end_dt =  mission.endDate.strftime("%d/%m/%Y %H:%M")
-    
-    assigned_soldiers = set()
-    
-    # Iterate through existing missions to check for overlaps
-    for mission in schedule:
-        mission_start = mission.startDate.strftime("%d/%m/%Y %H:%M")
-        mission_end = mission.endDate.strftime("%d/%m/%Y %H:%M")
-        
-        if not (new_mission_end_dt <= mission_start or new_mission_start_dt >= mission_end):
-            assigned_soldiers.update(mission.get('soldiersOnMission', []))
-    
-    # Find all unique soldiers in the schedule
-    all_soldiers = set(soldier for mission in schedule for soldier in mission.get('soldiersOnMission', []))
-    
-    # Determine unassigned soldiers by subtracting assigned soldiers from all soldiers
-    unassigned_soldiers = all_soldiers - assigned_soldiers
-    
-    return list(unassigned_soldiers)
-
-
-
-        
-def add_new_mission_with_soldiers(schedule_json_str, new_mission_details):
-    missions = json.loads(schedule_json_str)
-
-    # Attempt to find available soldiers for the new mission
-    available_soldiers = find_available_soldiers(missions, new_mission_details)
-
-    # If no available soldiers were found, try finding unassigned soldiers
-    if not available_soldiers:
-        available_soldiers = find_unassigned_soldiers(missions, new_mission_details['startDate'], new_mission_details['endDate'])
-        print("No available soldiers found. Here are soldiers not assigned to any missions in the provided timeframe:")
-        print(available_soldiers)
-    else:
-        print("Available soldiers for selection:", available_soldiers)
-
-    needed_soldiers_count = new_mission_details.get("soldierCount", len(available_soldiers))  # Default to all available if not specified
-    selected_soldiers = available_soldiers[:needed_soldiers_count]
-
-    print("Selected soldiers for the mission:", selected_soldiers)
-
-    # Assign the selected soldiers to the new mission and add it to the schedule
-    new_mission_details["soldiersOnMission"] = selected_soldiers
-    missions.append(new_mission_details)
-
-    return json.dumps(missions, indent=4)
-
 
 
 def main():
@@ -348,7 +296,7 @@ def main():
     }
 
     # Simulate the process of adding a new mission and finding/selecting/assigning available soldiers
-    updated_schedule_json_str = add_new_mission_with_soldiers(schedule__json, new_mission_details)
+    updated_schedule_json_str = add_new_mission_with_soldiers(schedule__json, new_mission_details, soldiers_json_str)
     print(updated_schedule_json_str)
     
 
