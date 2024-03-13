@@ -34,6 +34,10 @@ const { EntityNotFoundError, BadRequestError } = require('../errors/errors');
 //   }
 // };
 
+function escapeShellArg(arg) {
+  return `'${arg.replace(/'/g, "'\\''")}'`;
+}
+
 exports.algorithmController = {
   async executeAlgorithm(req, res, next) {
     try {
@@ -57,8 +61,11 @@ exports.algorithmController = {
       const missionsJSON = JSON.stringify(missionArr);
       const soldiersJSON = JSON.stringify(soldierRes);
 
+      const escapedMissionsJSON = escapeShellArg(missionsJSON);
+      const escapedSoldiersJSON = escapeShellArg(soldiersJSON);
+
       const scriptPath = path.join(__dirname, '..', '..', 'algorithm', 'cpAlgorithm.py');
-      const command = `. ${path.join(process.env.VIRTUAL_ENV, 'bin', 'activate')} && python ${scriptPath} '${missionsJSON}' '${soldiersJSON}'`;
+      const command = `. ${path.join(process.env.VIRTUAL_ENV, 'bin', 'activate')} && python ${scriptPath} ${escapedMissionsJSON} ${escapedSoldiersJSON}`;
       const pythonProcess = spawner('bash', ['-c', command]);
 
       console.log(command);
