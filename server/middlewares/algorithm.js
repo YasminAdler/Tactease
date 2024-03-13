@@ -1,3 +1,4 @@
+const { execSync } = require('child_process');
 const spawner = require('child_process').spawn;
 const path = require('path');
 const {
@@ -11,6 +12,15 @@ const {
 } = require('../repositories/soldierRepository');
 
 const { EntityNotFoundError, BadRequestError } = require('../errors/errors');
+
+// Execute command to get Python path
+let pythonPath;
+try {
+  pythonPath = execSync('where python').toString().trim();
+} catch (error) {
+  console.error('Unable to determine Python path.');
+  process.exit(1);
+}
 
 exports.algorithmController = {
   async executeAlgorithm(req, res, next) {
@@ -34,9 +44,8 @@ exports.algorithmController = {
 
       const missionsJSON = JSON.stringify(missionArr);
       const soldiersJSON = JSON.stringify(soldierRes);
-      
-      const pythonProcess = spawner('python', ['-c', `import algorithm.cpAlgorithm; algorithm.cpAlgorithm.scheduleAlg(${missionsJSON}, ${soldiersJSON})`]);
 
+      const pythonProcess = spawner('python', ['-c', `import algorithm.cpAlgorithm; algorithm.cpAlgorithm.scheduleAlg(${missionsJSON}, ${soldiersJSON})`]);
 
       pythonProcess.stdout.on('data', async (data) => {
         try {
