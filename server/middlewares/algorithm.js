@@ -1,6 +1,4 @@
-const { execSync } = require('child_process');
 const spawner = require('child_process').spawn;
-const path = require('path');
 const {
   createMission,
   updateMission,
@@ -12,15 +10,6 @@ const {
 } = require('../repositories/soldierRepository');
 
 const { EntityNotFoundError, BadRequestError } = require('../errors/errors');
-
-// Execute command to get Python path
-let pythonPath;
-try {
-  pythonPath = execSync('where python').toString().trim();
-} catch (error) {
-  console.error('Unable to determine Python path.');
-  process.exit(1);
-}
 
 exports.algorithmController = {
   async executeAlgorithm(req, res, next) {
@@ -40,7 +29,7 @@ exports.algorithmController = {
         missionArr = missionRes;
       }
       const soldierRes = await retrieveSoldierByClass(missionRes.classId);
-      if (!soldierRes || soldierRes.length === 0) throw new EntityNotFoundError(`class with id <${classId}>`);
+      if (!soldierRes || soldierRes.length === 0) throw new EntityNotFoundError(`class with id <${missionRes.classId}>`);
 
       const missionsJSON = JSON.stringify(missionArr);
       const soldiersJSON = JSON.stringify(soldierRes);
