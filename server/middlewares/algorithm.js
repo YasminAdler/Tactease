@@ -1,5 +1,6 @@
+require('dotenv').config();
 const spawner = require('child_process').spawn;
-const { execSync } = require('child_process');
+// const { execSync } = require('child_process');
 const path = require('path');
 const {
   createMission,
