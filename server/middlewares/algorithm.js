@@ -61,6 +61,8 @@ exports.algorithmController = {
       const command = `. ${path.join(process.env.VIRTUAL_ENV, 'bin', 'activate')} && python ${scriptPath} '${missionsJSON}' '${soldiersJSON}'`;
       const pythonProcess = spawner('bash', ['-c', command]);
 
+      console.log(command);
+
       pythonProcess.stdout.on('data', async (data) => {
         try {
           const retrievedData = JSON.parse(data); // Parse the data to JSON object
