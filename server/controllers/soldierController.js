@@ -63,6 +63,8 @@ exports.soldiersController = {
                 || !depClass
                 || !pakal
       ) throw new PropertyNotFoundError('create - missing arguments');
+      // const hashedPassword = await bcrypt.hash(password, 10);
+      // req.body.password = hashedPassword;
       const soldier = await createSoldier(req.body);
       res.status(200).json(soldier);
     } catch (error) {
@@ -113,10 +115,9 @@ exports.soldiersController = {
       const {
         fullName, depClass, pakal, requestList,
       } = soldier;
-      // if (await bcrypt.compare(password, soldier.password)) {
       if (req.session.authenticated) {
         res.json(req.session);
-      } else if (password === soldier.password) {
+      } else if (await bcrypt.compare(password, soldier.password)) {
         req.session.authenticated = true;
         req.session.user = {
           personalNumber, fullName, depClass, pakal, requestList,
