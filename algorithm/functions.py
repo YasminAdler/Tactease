@@ -8,7 +8,6 @@ import logging
 # Initialize logging
 logging.basicConfig(filename='error_log.txt', level=logging.ERROR, format='%(asctime)s:%(levelname)s:%(message)s')
 
-
 def datetime_to_hours(datetime_input):
     try:
         """Function to convert datetime strings to a consistent unit (e.g., hours)"""
