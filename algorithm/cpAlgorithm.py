@@ -206,4 +206,4 @@ def scheduleAlg(missionsInput, soldiersInput):
         dataTosend = {"error": "No solution was found:\n" + solver.ResponseStats()}
 
     result = json.dumps(dataTosend)
-    print(result)
+    return result
