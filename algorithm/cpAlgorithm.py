@@ -13,12 +13,18 @@ MIN_REST_HOURS = 6  # Minimal resting time in hours
 
 def scheduleAlg(missionsInput, soldiersInput):
     
+    print('inside python')
     missions_json = json.dumps(missionsInput)
+    print('after jsonfiying missions')
     soldiers_json = json.dumps(soldiersInput)
+    print('after jsonfiying soldiers')
 
     missions = getMissions(missions_json)
-    soldiers = getSoldiers(soldiers_json)
+    print('after getMisions')
 
+    soldiers = getSoldiers(soldiers_json)
+    print('after getSoldiers')
+    
     model = cp_model.CpModel()
 
     mission_intervals = {}

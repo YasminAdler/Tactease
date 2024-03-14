@@ -46,7 +46,7 @@ exports.algorithmController = {
 
       const scriptPath = path.join(__dirname, '..', '..', 'algorithm', 'cpAlgorithm.py');
       const command = `. ${path.join(process.env.VIRTUAL_ENV, 'bin', 'activate')} && python ${scriptPath} ${escapedMissionsJSON} ${escapedSoldiersJSON}`;
-      const pythonProcess = spawner('bash', ['-c', command]);
+      const pythonProcess = spawner('bash', ['-c', command], { stdio: 'inherit' }); // Redirect stdout to the console
 
       pythonProcess.stdout.on('data', async (data) => {
         try {
