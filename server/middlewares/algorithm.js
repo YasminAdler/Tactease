@@ -1,4 +1,6 @@
+require('dotenv').config();
 const spawner = require('child_process').spawn;
+// const { execSync } = require('child_process');
 const path = require('path');
 const {
   createMission,
@@ -11,6 +13,30 @@ const {
 } = require('../repositories/soldierRepository');
 
 const { EntityNotFoundError, BadRequestError } = require('../errors/errors');
+
+// exports.activatePython = () => {
+//   try {
+//     const venvPath = process.env.VIRTUAL_ENV;
+//     const command = `. ${path.join(venvPath, 'bin', 'activate')} && pip show ortools`;
+
+//     const showOutput = execSync(command, { encoding: 'utf-8', shell: 'bash' });
+//     if (!showOutput.includes('Version')) {
+//       const installCommand = `. ${path.join(venvPath, 'bin', 'activate')} && pip install ortools`;
+//       execSync(installCommand, { stdio: 'inherit', shell: 'bash' });
+//       console.log('ortools installed successfully.');
+//     } else {
+//       console.log('ortools is already installed.');
+//     }
+
+//     console.log('Virtual environment activated.');
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
+function escapeShellArg(arg) {
+  return `'${arg.replace(/'/g, "'\\''")}'`;
+}
 
 exports.algorithmController = {
   async executeAlgorithm(req, res, next) {
@@ -30,13 +56,19 @@ exports.algorithmController = {
         missionArr = missionRes;
       }
       const soldierRes = await retrieveSoldierByClass(missionRes.classId);
-      if (!soldierRes || soldierRes.length === 0) throw new EntityNotFoundError(`class with id <${classId}>`);
+      if (!soldierRes || soldierRes.length === 0) throw new EntityNotFoundError(`class with id <${missionRes.classId}>`);
 
       const missionsJSON = JSON.stringify(missionArr);
       const soldiersJSON = JSON.stringify(soldierRes);
-      
-      const pythonProcess = spawner('python', ['-c', `import algorithm.cpAlgorithm; algorithm.cpAlgorithm.scheduleAlg(${missionsJSON}, ${soldiersJSON})`]);
 
+      const escapedMissionsJSON = escapeShellArg(missionsJSON);
+      const escapedSoldiersJSON = escapeShellArg(soldiersJSON);
+
+      const scriptPath = path.join(__dirname, '..', '..', 'algorithm', 'cpAlgorithm.py');
+      const command = `. ${path.join(process.env.VIRTUAL_ENV, 'bin', 'activate')} && python ${scriptPath} ${escapedMissionsJSON} ${escapedSoldiersJSON}`;
+      const pythonProcess = spawner('bash', ['-c', command]);
+
+      console.log(command);
 
       pythonProcess.stdout.on('data', async (data) => {
         try {
