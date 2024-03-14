@@ -15,9 +15,9 @@ def getMissions(missions_data):
                 soldiersOnMission=inputMission["soldiersOnMission"]
             )
             missions.append(mission)
+        return missions
     except Exception as e:
         print("Error occurred:", e)
-    return missions
 
 
 def getSoldiers(soldiers_data):

@@ -14,26 +14,6 @@ const {
 
 const { EntityNotFoundError, BadRequestError } = require('../errors/errors');
 
-// exports.activatePython = () => {
-//   try {
-//     const venvPath = process.env.VIRTUAL_ENV;
-//     const command = `. ${path.join(venvPath, 'bin', 'activate')} && pip show ortools`;
-
-//     const showOutput = execSync(command, { encoding: 'utf-8', shell: 'bash' });
-//     if (!showOutput.includes('Version')) {
-//       const installCommand = `. ${path.join(venvPath, 'bin', 'activate')} && pip install ortools`;
-//       execSync(installCommand, { stdio: 'inherit', shell: 'bash' });
-//       console.log('ortools installed successfully.');
-//     } else {
-//       console.log('ortools is already installed.');
-//     }
-
-//     console.log('Virtual environment activated.');
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
-
 function escapeShellArg(arg) {
   return `'${arg.replace(/'/g, "'\\''")}'`;
 }
@@ -67,8 +47,6 @@ exports.algorithmController = {
       const scriptPath = path.join(__dirname, '..', '..', 'algorithm', 'cpAlgorithm.py');
       const command = `. ${path.join(process.env.VIRTUAL_ENV, 'bin', 'activate')} && python ${scriptPath} ${escapedMissionsJSON} ${escapedSoldiersJSON}`;
       const pythonProcess = spawner('bash', ['-c', command]);
-
-      console.log(command);
 
       pythonProcess.stdout.on('data', async (data) => {
         try {
