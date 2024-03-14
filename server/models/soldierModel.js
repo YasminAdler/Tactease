@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose');
-// const { RequestModel } = require('./requestModel');
 
 const ClassModel = new Schema({
   classId: { type: Number, required: true },
@@ -7,7 +6,6 @@ const ClassModel = new Schema({
 }, { collection: 'classes' });
 
 const RequestModel = new Schema({
-  // soldierId: { type: ObjectId, required: true },
   requestType: { type: String, required: true },
   daysOffType: { type: String, required: true },
   startDate: { type: String, required: true },
