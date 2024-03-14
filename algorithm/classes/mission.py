@@ -12,7 +12,7 @@ class Mission:
     missionId_counter = 1  # Class variable to auto-increment missionId
 
     def __init__(self, missionId, missionType, startDate, endDate, soldierCount, soldiersOnMission=[]):
-        self.missionId = missionId
+        self._id = missionId
         self.missionType = missionType
         self.startDate = datetime.strptime(startDate, "%d/%m/%Y %H:%M")
         self.endDate = datetime.strptime(endDate, "%d/%m/%Y %H:%M")

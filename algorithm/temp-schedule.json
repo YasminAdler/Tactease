@@ -5,7 +5,7 @@
         "startDate": "12/02/2024 6:00",
         "endDate": "12/02/2024 10:00",
         "soldierCount": 2,
-        "soldiersOnMission": ["5555555", "1232323"]
+        "soldiersOnMission": ["1234567", "8765421"]
     },
     {
         "missionId": 2,
@@ -13,7 +13,7 @@
         "startDate": "12/02/2024 14:00",
         "endDate": "12/02/2024 20:00",
         "soldierCount": 2,
-        "soldiersOnMission": ["1233215", "9879654"]
+        "soldiersOnMission": ["1122334", "9857656"]
     },
     {
         "missionId": 3,
@@ -21,7 +21,7 @@
         "startDate": "12/02/2024 18:00",
         "endDate": "12/02/2024 20:00",
         "soldierCount": 2,
-        "soldiersOnMission": ["1234567", "8256412"]
+        "soldiersOnMission": ["1233215", "9879654"]
     },
     {
         "missionId": 4,

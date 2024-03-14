@@ -2,10 +2,17 @@ from datetime import datetime
 
 class Request:
     def __init__(self, requestType, daysOffType, start_date, end_date):
+        datetime_format = "%d/%m/%Y %H:%M"  # Updated format to include time
         self.requestType = requestType
         self.daysOffType = daysOffType
-        self.start_date = datetime.strptime(start_date, "%Y-%m-%d")
-        self.end_date = datetime.strptime(end_date, "%Y-%m-%d")
+        self.start_date = datetime.strptime(start_date, datetime_format)
+        self.end_date = datetime.strptime(end_date, datetime_format)
+
+    # def __init__(self, requestType, daysOffType, start_date, end_date):
+    #     self.requestType = requestType
+    #     self.daysOffType = daysOffType
+    #     self.start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    #     self.end_date = datetime.strptime(end_date, "%Y-%m-%d")
         
 class MedicalRequest(Request):
     def __init__(self, requestType, daysOffType, start_date, end_date, file, fileName):
