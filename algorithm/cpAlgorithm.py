@@ -8,7 +8,6 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(current_dir)
 from functions import getMissions, getSoldiers, datetime_to_hours, hours_to_datetime
 
-
 MIN_REST_HOURS = 6  # Minimal resting time in hours
 
 def scheduleAlg(missionsInput, soldiersInput):
