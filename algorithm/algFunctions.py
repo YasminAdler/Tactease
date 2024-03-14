@@ -1,5 +1,9 @@
 from datetime import datetime, timedelta
 import json
+import pandas as pd
+from collections import defaultdict
+from functions import datetime_to_hours
+
 
 
 def parse_datetime(date_str):
@@ -178,3 +182,51 @@ if __name__ == "_main_":
     else:
         print(f"No mission data available for {specific_day}")
         
+
+def print_as_table(schedule_json):
+    # Parse the JSON string into a Python object
+    schedule = json.loads(schedule_json)
+    
+    data = []
+    for mission in schedule:
+        start_date = datetime.strptime(mission["startDate"], "%d/%m/%Y %H:%M").strftime("%Y-%m-%d")
+        for soldier_id in mission["soldiersOnMission"]:
+            start_time = datetime.strptime(mission["startDate"], "%d/%m/%Y %H:%M").strftime("%H:%M")
+            end_time = datetime.strptime(mission["endDate"], "%d/%m/%Y %H:%M").strftime("%H:%M")
+            data.append({
+                "Soldier ID": soldier_id,
+                "Date": start_date,
+                "Mission Time": f"{start_time}-{end_time}"
+            })
+    
+    # Create a DataFrame
+    df = pd.DataFrame(data)
+    
+    # Pivot the DataFrame to get the desired table format
+    df_pivot = df.pivot_table(index="Soldier ID", columns="Date", values="Mission Time", aggfunc=lambda x: ', '.join(x), fill_value="No mission")
+    
+    # Print the table
+    print(df_pivot)
+    
+def average_mission_time_per_soldier(missions):
+    missions_by_date = defaultdict(list)
+    soldier_count_by_date = defaultdict(int)
+    
+    for mission in missions:
+        date_key = mission['startDate'].split(' ')[0]  # Extract just the date part
+        start_hours = datetime_to_hours(mission['startDate'])
+        end_hours = datetime_to_hours(mission['endDate'])
+        duration_hours = end_hours - start_hours
+        missions_by_date[date_key].append(duration_hours)
+        soldier_count_by_date[date_key] += len(mission.get('soldiersOnMission', []))  # Count soldiers for each mission
+    
+    average_hours_per_soldier_per_day = {}
+    for date, durations in missions_by_date.items():
+        total_hours = sum(durations)
+        # Avoid division by zero
+        if soldier_count_by_date[date] > 0:
+            average_hours_per_soldier_per_day[date] = total_hours / soldier_count_by_date[date]
+        else:
+            average_hours_per_soldier_per_day[date] = 0
+    
+    return average_hours_per_soldier_per_day
