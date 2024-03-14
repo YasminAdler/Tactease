@@ -12,8 +12,12 @@ from functions import getMissions, getSoldiers, datetime_to_hours, hours_to_date
 MIN_REST_HOURS = 6  # Minimal resting time in hours
 
 def scheduleAlg(missionsInput, soldiersInput):
-    missions = getMissions(missionsInput)
-    soldiers = getSoldiers(soldiersInput)
+    
+    missions_json = json.dumps(missionsInput)
+    soldiers_json = json.dumps(soldiersInput)
+
+    missions = getMissions(missions_json)
+    soldiers = getSoldiers(soldiers_json)
 
     model = cp_model.CpModel()
 
