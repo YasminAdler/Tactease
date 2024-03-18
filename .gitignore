@@ -13,7 +13,4 @@ package-lock.json
 ./node_modules
 ./algorithm/.idea
 node_modules/.package-lock.json
-package-lock.json
-package-lock.json
-node_modules/.package-lock.json
-package-lock.json
+node_modules
