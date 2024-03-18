@@ -1,4 +1,6 @@
+require('dotenv').config();
 const spawner = require('child_process').spawn;
+// const { execSync } = require('child_process');
 const path = require('path');
 const {
   createMission,
@@ -30,15 +32,14 @@ exports.algorithmController = {
         missionArr = missionRes;
       }
       const soldierRes = await retrieveSoldierByClass(missionRes.classId);
-      if (!soldierRes || soldierRes.length === 0) throw new EntityNotFoundError(`class with id <${classId}>`);
+      if (!soldierRes || soldierRes.length === 0) throw new EntityNotFoundError(`class with id <${missionRes.classId}>`);
 
       const missionsJSON = JSON.stringify(missionArr);
       const soldiersJSON = JSON.stringify(soldierRes);
 
-      const pythonScriptPath = path.join(__dirname, '..', 'algorithm', 'cpAlgorithm.py');
-      const pythonProcess = spawner('python', [pythonScriptPath, missionsJSON, soldiersJSON]);
-
-      //      const pythonProcess = spawner('python', ['-c', `import algorithm.cpAlgorithm; algorithm.cpAlgorithm.scheduleAlg(${missionsJSON}, ${soldiersJSON})`]);
+      const scriptPath = path.join(__dirname, '..', '..', 'algorithm', 'cpAlgorithm.py');
+      const command = `. ${path.join(process.env.VIRTUAL_ENV, 'bin', 'activate')} && python ${scriptPath} ${missionsJSON} ${soldiersJSON}`;
+      const pythonProcess = spawner('bash', ['-c', command]); // Redirect stdout to the console
 
       pythonProcess.stdout.on('data', async (data) => {
         try {

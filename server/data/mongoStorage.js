@@ -77,4 +77,8 @@ module.exports = class mongoStorage extends EventEmitter {
       { new: true, useFindAndModify: false },
     );
   }
+
+  retrieveByPN(personalNumber) {
+    return this.Model.findOne(personalNumber);
+  }
 };

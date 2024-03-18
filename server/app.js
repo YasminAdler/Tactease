@@ -3,9 +3,20 @@ require('express-async-errors');
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
+const session = require('express-session');
 const { errorHandler } = require('./middlewares/errorHandler');
 
+const store = new session.MemoryStore();
+
 const app = express();
+app.use(session({
+  secret: 'some secret',
+  resave: false,
+  cookie: { maxAge: 60000 },
+  saveUninitialized: false,
+  store,
+}));
+
 const port = process.env.PORT || 3000;
 const { missionsRouter } = require('./routers/missionRouter');
 const { soldierRouter } = require('./routers/soldierRouter');

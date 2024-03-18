@@ -1,5 +1,4 @@
 const MongoStorage = require('../data/mongoStorage');
-// const localStorage = require('../data/localStorage');
 
 const mongoStorage = new MongoStorage('mission');
 const findMissions = () => mongoStorage.find({});
@@ -8,7 +7,7 @@ const retrieveMission = (id) => mongoStorage.retrieve({ _id: id });
 
 const createMission = (mission) => mongoStorage.create(mission);
 
-const createMissions = (missions) => mongoStorage.createMany(missions);
+const createMissions = (mission) => mongoStorage.createMany(mission);
 
 const updateMission = (id, mission) => mongoStorage.update({ _id: id }, mission);
 
