@@ -8,4 +8,7 @@ package-lock.json
 ./vscode
 ./algorithm/.idea
 ./algorithm/__pycache__
-./algorithm/classes/__pycache__
+node_modules/
+algorithm/flask_server/venv/Scripts
+algorithm/flask_server/venv/Include
+algorithm/flask_server/venv/Lib
