@@ -9,6 +9,6 @@ package-lock.json
 ./algorithm/.idea
 ./algorithm/__pycache__
 node_modules/
-flask_server/venv/Scripts
-flask_server/venv/Include
-flask_server/venv/Lib
+algorithm/flask_server/venv/Scripts
+algorithm/flask_server/venv/Include
+algorithm/flask_server/venv/Lib
