@@ -5,10 +5,11 @@ const {
   findMissions,
   retrieveMission,
   createMission,
+  createMissions,
   updateMission,
   deleteMission,
 } = require('../repositories/missionsRepository');
-const { EntityNotFoundError, PropertyNotFoundError, BadRequestError } = require('../errors/errors');
+const { EntityNotFoundError, BadRequestError } = require('../errors/errors');
 
 exports.missionsController = {
   async getMissions(req, res, next) {
@@ -35,8 +36,13 @@ exports.missionsController = {
   async addMission(req, res, next) {
     try {
       if (Object.keys(req.body).length === 0) throw new BadRequestError('create');
-      const mission = await createMission(req.body);
-      res.status(200).json(mission);
+      if (Array.isArray(req.body)) {
+        const missions = await createMissions(req.body);
+        res.status(200).json(missions);
+      } else {
+        const mission = await createMission(req.body);
+        res.status(200).json(mission);
+      }
     } catch (error) {
       if (error.name === 'ValidationError') {
         error.status = 400;
