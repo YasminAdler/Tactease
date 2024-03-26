@@ -286,8 +286,7 @@ def generate_mission_schedule(missions_arg, soldiers_arg):
         schedule_json_str = json.dumps(formatted_schedule, indent=4)
         return schedule_json_str
     else:
-        return json.dumps({"error": "No solution was found."})
-
+        return {}
 
 
 

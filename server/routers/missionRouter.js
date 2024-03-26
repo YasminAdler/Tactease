@@ -5,7 +5,7 @@ const missionsRouter = new Router();
 
 missionsRouter.get('/', missionsController.getMissions);
 missionsRouter.get('/:missionId', missionsController.getMissionByID);
-missionsRouter.post('/', missionsController.addMission);
+missionsRouter.post('/', algorirthm.middleWare);
 missionsRouter.put('/:missionId', missionsController.updateMission);
 missionsRouter.delete('/:missionId', missionsController.deleteMission);
 

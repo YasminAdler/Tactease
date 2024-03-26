@@ -1,81 +1,67 @@
-require('dotenv').config();
-const spawner = require('child_process').spawn;
-// const { execSync } = require('child_process');
-const path = require('path');
-const {
-  createMission,
-  updateMission,
-  deleteMission,
-} = require('../repositories/missionsRepository');
 
-const {
-  retrieveSoldierByClass,
-} = require('../repositories/soldierRepository');
+const axios = require('axios');
+const { StatusCodes } = require('http-status-codes');
+const { missionsController } = require('../controllers/missionsController');
 
-const { EntityNotFoundError, BadRequestError } = require('../errors/errors');
+
+// create a new function diiferent middleWare from  that recieves a string 
+// that sayes generateSchedule/add_mission (exactly how it is written after the "/"),
+// and it recieves a new mission and the string, it is going to run the flask
+// and does a return of what is returned from the flask
+// what that is being returned from the flask is being send to the middleware 
+
 
 exports.algorithmController = {
-  async executeAlgorithm(req, res, next) {
+  /**
+ * Connects to the Flask server to either generate a schedule or add a mission.
+ * @param {string} requestString - The Flask API endpoint (generateSchedule or add_mission).
+ * @param {Object} newMission - The mission data to send to the Flask API.
+ * @param {Array} soldiers - The soldiers data to send to the Flask API.
+ * @returns {Object} The response data from the Flask API.
+ */
+  async flaskConnection(requestString, newMission, soldiers) {
+    const flaskApiUrl = `http://localhost:5000/${requestString}`;
     try {
-      if (Object.keys(req.body).length === 0) throw new BadRequestError('create');
-      const {
-        missionType, startDate, endDate, soldierCount,
-      } = req.body;
-      if (!missionType || !startDate || !endDate || !soldierCount) throw new BadRequestError('mission - missing arguments');
-      const missionRes = await createMission(req.body);
-      if (!missionRes || missionRes.length === 0) throw new EntityNotFoundError('algorithm: missionRes is empty');
-
-      let missionArr = [];
-      if (!Array.isArray(missionRes)) {
-        missionArr = [missionRes];
+      // Determine the appropriate payload based on the requestString
+      let payload;
+      if (requestString === 'generateSchedule') {
+        payload = { missions: JSON.stringify([newMission]), soldiers: JSON.stringify(soldiers) };
+      } else if (requestString === 'add_mission') {
+        payload = { schedule: JSON.stringify({}), new_mission: JSON.stringify(newMission), soldiers: JSON.stringify(soldiers) };
       } else {
-        missionArr = missionRes;
+        throw new Error('Invalid requestString provided to flaskConnection');
       }
-      const soldierRes = await retrieveSoldierByClass(missionRes.classId);
-      if (!soldierRes || soldierRes.length === 0) throw new EntityNotFoundError(`class with id <${missionRes.classId}>`);
 
-      const missionsJSON = JSON.stringify(missionArr);
-      const soldiersJSON = JSON.stringify(soldierRes);
-
-      const scriptPath = path.join(__dirname, '..', '..', 'algorithm', 'cpAlgorithm.py');
-      const command = `. ${path.join(process.env.VIRTUAL_ENV, 'bin', 'activate')} && python ${scriptPath} ${missionsJSON} ${soldiersJSON}`;
-      const pythonProcess = spawner('bash', ['-c', command]); // Redirect stdout to the console
-
-      pythonProcess.stdout.on('data', async (data) => {
-        try {
-          const retrievedData = JSON.parse(data); // Parse the data to JSON object
-          if (retrievedData.includes('error')) {
-            deleteMission(missionRes._id);
-            throw new EntityNotFoundError('algorithm: not found schedule');
-          }
-
-          if (retrievedData.length === 0) throw new EntityNotFoundError('algorithm: retrievedData is empty');
-
-          const getKey = Object.keys(retrievedData[0]);
-          const id = getKey[0];
-          const values = retrievedData[0][id];
-          const updated = await updateMission(id, { soldiersOnMission: values });
-          res.status(200).json(updated);
-        } catch (error) {
-          next(error);
-        }
-      });
-
-      let errorData = ''; // Store error data
-      pythonProcess.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`);
-        errorData += data.toString(); // Append error data
-      });
-
-      // Handle process close event
-      pythonProcess.on('close', (code) => {
-        // If the process exits with an error code and the response hasn't been sent yet
-        if (code !== 0 && !res.headersSent) {
-          res.status(400).json({ error: errorData }); // Send error response
-        }
-      });
+      // Make the POST request to the Flask API
+      const response = await axios.post(flaskApiUrl, payload);
+      return response.data;
     } catch (error) {
+      console.error(`Error connecting to Flask API at ${flaskApiUrl}:`, error.message);
+      throw error; // Rethrow the error to be handled by the caller
+    }
+  },
+  async middleWare(req, res, next) {
+    try {
+      const missions = await missionsController.getMissions();
+      if (!Array.isArray(req.body)) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Expected an array of missions in the request body.' });
+      }
+      const processedMissions = req.body.map((mission, index) => ({ ...mission, _id: index }));
+      if (!missions) {
+        const result = await this.flaskConnection('generate_schedule', processedMissions);
+        res.status(200).json(result);
+      }
+      else {
+        const result = await this.flaskConnection('add_mission', processedMissions);
+        res.status(200).json(result);
+      }
+    }
+    catch (error) {
       next(error);
     }
   },
-};
+}
+
+//  את הריזולט מהפלסק צריך לבדוק 
+// אם מקבלים מערך ריק זורקים אררור מההנדלר אחרת צריך למחוק את האיי די הזמני מכל הפרססד מישיונס ולעשות בקונטרולר אד מישיון 
+// 
